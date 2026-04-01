@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Time Table - Focus Grid</title>
+	<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="../../styles/start/home.css">
+	<link rel="stylesheet" href="../../styles/start/dashboard.css">
+	<link rel="stylesheet" href="../../styles/time_table/table.css">
+</head>
+
+<body>
+	<!-- Top Header -->
+	<header class="top-header glass-panel">
+		<div class="header-left">
+			<div class="header-logo">
+				<h2>Focus Grid</h2>
+			</div>
+			<button id="sidebarToggle" class="menu-toggle-btn" aria-label="Toggle sidebar">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+					stroke-linecap="round" stroke-linejoin="round">
+					<line x1="3" y1="12" x2="21" y2="12"></line>
+					<line x1="3" y1="6" x2="21" y2="6"></line>
+					<line x1="3" y1="18" x2="21" y2="18"></line>
+				</svg>
+			</button>
+		</div>
+
+		<div class="header-greeting">
+			<h3 id="pageTitle">Time Table</h3>
+			<div class="motivating-line">
+				📚 Organize your class schedule and manage your time effectively.
+			</div>
+		</div>
+
+		<div class="user-profile">
+			<div class="user-info">
+				<span class="name" id="headerName">Boss User</span>
+				<span class="username" id="headerUsername">@boss_user</span>
+			</div>
+			<div class="avatar" id="headerAvatar">BU</div>
+		</div>
+	</header>
+
+	<div class="dashboard-container">
+		<!-- Sidebar / Menu -->
+		<aside class="sidebar glass-panel">
+		<div class="sidebar-header">
+			<h2 class="sidebar-logo">Focus Grid</h2>
+			<button class="sidebar-close-btn" aria-label="Close sidebar">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+			</button>
+		</div>
+		<div class="sidebar-nav-container">
+				<nav class="sidebar-menu">
+					<a href="../start/dashboard.html" class="menu-item">Dashboard</a>
+					<a href="../plan_day/tasks.html" class="menu-item">Plan Day</a>
+					<a href="../attendance/subjects.html" class="menu-item">Attendance</a>
+					<!-- <a href="#" class="menu-item">Focus Mode</a>
+					<a href="#" class="menu-item">Progress</a> -->
+					<a href="#" class="menu-item active">Time Table</a>
+				</nav>
+				<div class="sidebar-footer">
+					<a href="../start/login.html" class="menu-item logout">Logout</a>
+				</div>
+			</div>
+		</aside>
+
+		<!-- Main Content -->
+		<main class="main-content">
+			<div class="dashboard-body">
+				<!-- Top Controls -->
+				<div class="top-controls glass-panel">
+					<div class="controls-left">
+						<h3>Time Table</h3>
+					</div>
+					<div class="controls-right">
+						<button class="btn btn-secondary" id="editTimeTableBtn">Edit Time Table</button>
+						<button class="btn btn-primary" id="addClassBtn">+ Add Class</button>
+					</div>
+				</div>
+
+				<!-- Timetable Grid -->
+				<div class="timetable-wrapper glass-panel">
+					<div class="timetable-container">
+						<!-- Header Row with Time Slots -->
+						<div class="timetable-grid">
+							<div class="time-header empty-cell"></div>
+							<div class="time-header">8:00-9:00</div>
+							<div class="time-header">9:00-10:00</div>
+							<div class="time-header">10:00-11:00</div>
+							<div class="time-header">11:00-12:00</div>
+							<div class="time-header">12:00-1:00</div>
+							<div class="time-header">1:00-2:00</div>
+							<div class="time-header">2:00-3:00</div>
+							<div class="time-header">3:00-4:00</div>
+							<div class="time-header">4:00-5:00</div>
+							<div class="time-header">5:00-6:00</div>
+
+							<!-- Monday Row -->
+							<div class="day-label">Monday</div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+
+							<!-- Tuesday Row -->
+							<div class="day-label">Tuesday</div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+
+							<!-- Wednesday Row -->
+							<div class="day-label">Wednesday</div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+
+							<!-- Thursday Row -->
+							<div class="day-label">Thursday</div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+
+							<!-- Friday Row -->
+							<div class="day-label">Friday</div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+
+							<!-- Saturday Row -->
+							<div class="day-label">Saturday</div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+							<div class="time-slot"></div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</main>
+	</div>
+
+	<div class="modal-overlay" id="addClassModal" style="display: none;">
+		<div class="modal-content glass-panel">
+			<div class="modal-header">
+				<h3>Add Class</h3>
+				<button class="close-modal" id="closeAddClassModal" type="button" aria-label="Close">
+					<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+						stroke-linecap="round" stroke-linejoin="round">
+						<line x1="18" y1="6" x2="6" y2="18"></line>
+						<line x1="6" y1="6" x2="18" y2="18"></line>
+					</svg>
+				</button>
+			</div>
+
+			<form id="addClassForm" class="task-form">
+				<div id="classFormError" class="form-inline-error" role="alert" aria-live="polite"></div>
+				<div class="form-group">
+					<label for="classTitle">Title</label>
+					<input type="text" id="classTitle" name="title" required>
+				</div>
+
+				<div class="row">
+					<div class="form-group">
+						<label for="classDay">Day</label>
+						<select id="classDay" name="day">
+							<option value="Monday">Monday</option>
+							<option value="Tuesday">Tuesday</option>
+							<option value="Wednesday">Wednesday</option>
+							<option value="Thursday">Thursday</option>
+							<option value="Friday">Friday</option>
+							<option value="Saturday">Saturday</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="classType">Type</label>
+						<select id="classType" name="type">
+							<option value="class">Class</option>
+							<option value="break">Break</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="form-group">
+						<label for="classStartTime">Start Time</label>
+						<input type="time" id="classStartTime" name="start_time" required>
+					</div>
+					<div class="form-group">
+						<label for="classEndTime">End Time</label>
+						<input type="time" id="classEndTime" name="end_time" required>
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label for="classColor">Color</label>
+					<div class="color-palette" id="colorPalette">
+						<div class="color-option" data-color="#8B5CF6" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.6), rgba(139, 92, 246, 0.8));" title="Purple"></div>
+						<div class="color-option" data-color="#3B82F6" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.6), rgba(59, 130, 246, 0.8));" title="Blue"></div>
+						<div class="color-option" data-color="#22C55E" style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.6), rgba(34, 197, 94, 0.8));" title="Green"></div>
+						<div class="color-option" data-color="#FB923C" style="background: linear-gradient(135deg, rgba(251, 146, 60, 0.6), rgba(251, 146, 60, 0.8));" title="Orange"></div>
+						<div class="color-option" data-color="#EF4444" style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.6), rgba(239, 68, 68, 0.8));" title="Red"></div>
+						<div class="color-option" data-color="#06B6D4" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.6), rgba(6, 182, 212, 0.8));" title="Cyan"></div>
+						<div class="color-option" data-color="#EC4899" style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.6), rgba(236, 72, 153, 0.8));" title="Pink"></div>
+						<div class="color-option" data-color="#6B7280" style="background: linear-gradient(135deg, rgba(107, 114, 128, 0.6), rgba(107, 114, 128, 0.8));" title="Gray"></div>
+					</div>
+					<input type="hidden" id="classColor" name="color" value="">
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" id="cancelAddClassBtn">Cancel</button>
+					<button type="submit" class="btn btn-primary" id="saveClassBtn">Save</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<script src="../../js/time_table/table.js"></script>
+</body>
+
+</html>

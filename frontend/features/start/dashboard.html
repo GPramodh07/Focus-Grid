@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Focus Grid</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/start/home.css">
+    <link rel="stylesheet" href="../../styles/start/dashboard.css">
+</head>
+
+<body>
+    <!-- Top Header -->
+    <header class="top-header glass-panel">
+        <div class="header-left">
+            <div class="header-logo">
+                <h2>Focus Grid</h2>
+            </div>
+            <button id="sidebarToggle" class="menu-toggle-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <div class="header-greeting">
+            <h3>Hi Boss,</h3>
+            <div class="motivating-line">
+                ✨ "The secret of getting ahead is getting started."
+            </div>
+        </div>
+
+        <div class="user-profile">
+            <div class="user-info">
+                <span class="name">Boss User</span>
+                <span class="username">@boss_user</span>
+            </div>
+            <div class="avatar">BU</div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Sidebar / Menu -->
+        <aside class="sidebar glass-panel">
+            <div class="sidebar-header">
+                <h2 class="sidebar-logo">Focus Grid</h2>
+                <button class="sidebar-close-btn" aria-label="Close sidebar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="sidebar-nav-container">
+                <nav class="sidebar-menu">
+                    <a href="#" class="menu-item active">Dashboard</a>
+                    <a href="../plan_day/tasks.html" class="menu-item">Plan Day</a>
+                    <a href="../attendance/subjects.html" class="menu-item">Attendance</a>
+                    <!-- <a href="#" class="menu-item">Focus Mode</a> -->
+                    <!-- <a href="#" class="menu-item">Quick Notes</a> -->
+                    <a href="../time_table/table.html" class="menu-item">Time Table</a>
+                </nav>
+                <div class="sidebar-footer">
+                    <a href="login.html" class="menu-item logout">Logout</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Body / Blocks -->
+            <div class="dashboard-body">
+                <div class="dashboard-grid">
+                    <!-- Subject Wise Attendance Block -->
+                    <div class="dashboard-block glass-panel">
+                        <h3>Subject Wise Attendance</h3>
+                        <p>Monitor your attendance percentage for each of your subjects.</p>
+                    </div>
+
+                    <!-- Today's Classes Block -->
+                    <div class="dashboard-block glass-panel">
+                        <h3>Today's Classes</h3>
+                        <p>Your schedule and upcoming lectures for today.</p>
+                    </div>
+
+                    <!-- Today's Goal Block -->
+                    <div class="dashboard-block glass-panel">
+                        <h3>Today's Goal</h3>
+                        <p>Your main objectives and tasks to complete by the end of the day.</p>
+                    </div>
+
+                    <!-- Progress Block -->
+                    <div class="dashboard-block glass-panel">
+                        <h3>Progress</h3>
+                        <p>Track your overall performance and consistency over time.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.querySelector('.sidebar');
+
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+        });
+
+        // Auto-collapse sidebar on mobile
+        if (sidebar && window.innerWidth <= 768) {
+            sidebar.classList.add('collapsed');
+        }
+
+        // Sidebar close button
+        const sidebarCloseBtn = document.querySelector('.sidebar-close-btn');
+        if (sidebarCloseBtn && sidebar) {
+            sidebarCloseBtn.addEventListener('click', () => {
+                sidebar.classList.add('collapsed');
+            });
+        }
+    </script>
+</body>
+
+</html>

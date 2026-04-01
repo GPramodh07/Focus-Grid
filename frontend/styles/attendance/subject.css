@@ -1,0 +1,546 @@
+/* Attendance Page Specific Styles */
+.top-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+}
+
+.controls-left h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+.controls-right {
+    display: flex;
+    gap: 1rem;
+}
+
+.attendance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.attendance-header h3 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.attendance-header p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1rem;
+}
+
+.attendance-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.subject-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    width: 100%;
+    transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+    cursor: grab;
+    user-select: none;
+    position: relative;
+}
+
+.subject-block:active {
+    cursor: grabbing;
+}
+
+.subject-block.dragging {
+    opacity: 0.4;
+    transform: scale(0.98);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.subject-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.drag-handle {
+    color: rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.drag-handle:hover {
+    color: white;
+}
+
+.subject-info h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+}
+
+.add-subject-btn {
+    padding: 0.6rem 1.25rem;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Circular Attendance Indicator & Hover Controls */
+.attendance-controls {
+    display: flex;
+    align-items: center;
+    position: relative;
+    /* 
+     * Reserving enough width so that when the circle shifts left 
+     * to reveal the buttons, the hover state remains active safely. 
+     * 160px provides comfortable bounds for mouse movement.
+     */
+    width: 160px;
+    height: 54px;
+}
+
+.attendance-circle {
+    position: absolute;
+    right: 0;
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.attendance-controls:hover .attendance-circle {
+    transform: translateX(-100px);
+    /* shift circle to the left, making space for 2 buttons */
+}
+
+.circular-chart {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.circle-bg {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.05);
+    stroke-width: 2.8;
+}
+
+.circle {
+    fill: none;
+    stroke-width: 2.8;
+    stroke-linecap: round;
+    transition: stroke-dasharray 0.8s ease;
+}
+
+.attendance-circle .percentage {
+    position: absolute;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: white;
+}
+
+/* Floating Actions */
+.subject-actions {
+    position: absolute;
+    right: 0;
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(10px) scale(0.9);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
+}
+
+.attendance-controls:hover .subject-actions {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0) scale(1);
+    /* Adding subtle delay so circle slides out before buttons fade in completely */
+    transition-delay: 0.05s;
+}
+
+.action-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    /* circular to match attendance circle aesthetics */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+}
+
+.action-btn.edit-btn:hover {
+    color: #3b82f6;
+    border-color: rgba(59, 130, 246, 0.5);
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.action-btn.delete-btn:hover {
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.5);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+@media (max-width: 768px) {
+    .top-controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+        padding: 1.2rem 1.5rem;
+    }
+
+    .controls-right {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .subject-block {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .attendance-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .attendance-controls {
+        align-self: flex-end;
+        gap: 0.5rem;
+    }
+
+    /* Make edit/delete always visible — no hover on touch */
+    .subject-actions {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0) scale(1);
+        position: static;
+    }
+
+    /* Disable circle slide and hover effects on touch */
+    .attendance-controls:hover .attendance-circle {
+        transform: none;
+    }
+
+    .attendance-controls:hover .subject-actions {
+        transition-delay: 0s;
+    }
+
+    /* Modal */
+    .modal-content .modal-header {
+        padding: 20px 24px;
+    }
+
+    .subject-form {
+        padding: 20px 24px;
+    }
+
+    .modal-footer {
+        padding: 16px 24px;
+    }
+}
+
+@media (max-width: 425px) {
+    .top-controls {
+        padding: 1rem;
+    }
+
+    .controls-left h3 {
+        font-size: 1.2rem;
+    }
+
+    .subject-block {
+        padding: 1rem 1.25rem;
+        border-radius: 12px;
+    }
+
+    .subject-info h4 {
+        font-size: 1.05rem;
+    }
+
+    .attendance-controls {
+        width: 130px;
+        height: 46px;
+    }
+
+    .attendance-circle {
+        width: 46px;
+        height: 46px;
+    }
+
+    .attendance-circle .percentage {
+        font-size: 0.75rem;
+    }
+
+    .action-btn {
+        width: 38px;
+        height: 38px;
+    }
+
+    /* Modal */
+    .modal-content {
+        width: 95%;
+        border-radius: 18px;
+    }
+
+    .modal-content .modal-header {
+        padding: 16px 18px;
+    }
+
+    .modal-header h3 {
+        font-size: 1.3rem;
+    }
+
+    .subject-form {
+        padding: 16px 18px;
+    }
+
+    .modal-footer {
+        padding: 14px 18px;
+    }
+
+    .modal-footer .btn {
+        padding: 10px 18px;
+        font-size: 0.9rem;
+    }
+}
+
+/* ============================================
+   SUBJECT MODAL STYLES
+   ============================================ */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUpModal {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-content {
+    width: 90%;
+    max-width: 500px;
+    padding: 0;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    animation: slideUpModal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 32px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header h3 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: white;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.close-modal {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.subject-form {
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: 0.5px;
+}
+
+.form-group input[type="text"] {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-group input[type="text"]::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.form-group input[type="text"]:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.form-group input[type="text"]:focus {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 20px 32px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-footer .btn {
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.modal-footer .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+}
+
+.modal-footer .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+}
+
+.modal-footer .btn-primary:active {
+    transform: translateY(0);
+}
+
+.modal-footer .btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.modal-footer .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+#deleteSubjectBtn {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #ef4444 !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+
+#deleteSubjectBtn:hover {
+    background: rgba(239, 68, 68, 0.25) !important;
+    border-color: rgba(239, 68, 68, 0.5) !important;
+}
+
+/* Form Validation Error Message */
+.form-error {
+    display: none;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid #ef4444;
+    border-radius: 8px;
+    color: #fca5a5;
+    font-size: 0.9rem;
+    font-weight: 500;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

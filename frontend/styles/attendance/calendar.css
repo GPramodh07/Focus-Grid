@@ -1,0 +1,521 @@
+/* Calendar Specific Styles */
+        .calendar-container {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .month-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .month-display {
+            font-size: 1.1rem;
+            font-weight: 600;
+            min-width: 120px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Subject Display beside month */
+        .subject-month-divider {
+            width: 1px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 0 10px;
+        }
+
+        .subject-display {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+
+        .day-name {
+            text-align: center;
+            font-weight: 600;
+            padding: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1 / 0.8;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 60px;
+            border-radius: 8px;
+            overflow: hidden; /* For full cell background */
+        }
+
+        .calendar-day:hover:not(.empty) {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .calendar-day.empty {
+            cursor: default;
+            opacity: 0.3;
+        }
+
+        .calendar-day.today {
+            border: 2px solid var(--primary);
+        }
+
+        .day-number {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .calendar-day.status-present { background-color: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); }
+        .calendar-day.status-absent { background-color: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); }
+        .calendar-day.status-note { background-color: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.4); }
+
+        .calendar-day.status-present:hover { background-color: rgba(16, 185, 129, 0.3); }
+        .calendar-day.status-absent:hover { background-color: rgba(239, 68, 68, 0.3); }
+        .calendar-day.status-note:hover { background-color: rgba(59, 130, 246, 0.3); }
+
+        .status-present-indicator { background-color: #10b981; }
+        .status-absent-indicator { background-color: #ef4444; }
+        .status-note-indicator { background-color: #3b82f6; }
+
+        .hours-badge {
+            font-size: 0.7rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 10px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        /* Modal Styles (matching Plan Day Add Task popup) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUpModal {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-content {
+            width: 90%;
+            max-width: 550px;
+            padding: 0;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            animation: slideUpModal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 28px 32px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header h3 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: white;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+
+        .close-modal {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .form-group label {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.95);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input[type="number"],
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group input[type="time"],
+        .form-group textarea,
+        .form-group select {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input[type="number"]:hover,
+        .form-group input[type="text"]:hover,
+        .form-group input[type="date"]:hover,
+        .form-group input[type="time"]:hover,
+        .form-group textarea:hover,
+        .form-group select:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .form-group input[type="number"]:focus,
+        .form-group input[type="text"]:focus,
+        .form-group input[type="date"]:focus,
+        .form-group input[type="time"]:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+            max-height: 150px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .form-group select {
+            appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 36px;
+        }
+
+        .form-group select option {
+            background-color: #2a2a2a;
+            color: white;
+            padding: 8px;
+        }
+
+        .form-group select option:hover {
+            background-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .form-group select option:checked {
+            background: linear-gradient(#595959, #595959);
+            background-color: rgba(139, 92, 246, 0.2);
+        }
+
+        /* Date Picker Icon Highlight */
+        .form-group input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            border-radius: 4px;
+            margin-right: 4px;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            filter: invert(1) brightness(1.2);
+        }
+
+        .form-group input[type="date"]:hover::-webkit-calendar-picker-indicator {
+            opacity: 1;
+        }
+
+        .form-group input[type="date"]:focus::-webkit-calendar-picker-indicator {
+            opacity: 1;
+        }
+
+        /* Time Picker Icon - Plain White */
+        .form-group input[type="time"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            border-radius: 4px;
+            margin-right: 4px;
+            opacity: 1;
+            transition: all 0.3s ease;
+            filter: invert(1) brightness(1);
+        }
+
+        .form-group input[type="time"]:hover::-webkit-calendar-picker-indicator {
+            opacity: 1;
+            filter: invert(1) brightness(1);
+        }
+
+        .form-group input[type="time"]:focus::-webkit-calendar-picker-indicator {
+            opacity: 1;
+            filter: invert(1) brightness(1);
+        }
+
+        /* Style form wrapper for consistent padding */
+        #attendanceForm {
+            padding: 28px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            padding: 20px 32px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 15px 20px;
+            font-size: 0.9rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+        }
+
+/* ============================================
+   RESPONSIVE — TABLET (768px)
+   ============================================ */
+@media (max-width: 768px) {
+    .calendar-header {
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px 16px;
+    }
+
+    .month-nav {
+        gap: 10px;
+    }
+
+    .month-display {
+        font-size: 1rem;
+        min-width: 100px;
+    }
+
+    .subject-display {
+        font-size: 0.95rem;
+    }
+
+    .calendar-grid {
+        gap: 6px;
+    }
+
+    .day-name {
+        font-size: 0.8rem;
+        padding: 6px;
+    }
+
+    .calendar-day {
+        padding: 6px;
+        min-height: 50px;
+    }
+
+    .day-number {
+        font-size: 0.95rem;
+    }
+
+    .hours-badge {
+        font-size: 0.6rem;
+        top: 6px;
+        right: 6px;
+        padding: 1px 4px;
+    }
+
+    /* Modal */
+    .modal-header {
+        padding: 20px 24px;
+    }
+
+    #attendanceForm {
+        padding: 20px 24px;
+    }
+
+    .modal-footer {
+        padding: 16px 24px;
+    }
+
+    .legend {
+        gap: 14px;
+        padding: 12px 16px;
+        font-size: 0.85rem;
+    }
+}
+
+/* ============================================
+   RESPONSIVE — MOBILE (425px)
+   ============================================ */
+@media (max-width: 425px) {
+    .calendar-container {
+        gap: 12px;
+    }
+
+    .calendar-header {
+        padding: 10px 12px;
+        gap: 10px;
+    }
+
+    .month-nav {
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .month-display {
+        font-size: 0.9rem;
+        min-width: 90px;
+    }
+
+    .subject-month-divider {
+        display: none;
+    }
+
+    .subject-display {
+        font-size: 0.85rem;
+    }
+
+    .calendar-grid {
+        gap: 4px;
+    }
+
+    .day-name {
+        font-size: 0.7rem;
+        padding: 4px;
+    }
+
+    .calendar-day {
+        padding: 4px;
+        min-height: 44px;
+        border-radius: 6px;
+    }
+
+    .day-number {
+        font-size: 0.85rem;
+    }
+
+    .hours-badge {
+        font-size: 0.55rem;
+        top: 3px;
+        right: 3px;
+        padding: 1px 3px;
+    }
+
+    /* Modal */
+    .modal-content {
+        width: 95%;
+        border-radius: 18px;
+    }
+
+    .modal-header {
+        padding: 16px 18px;
+    }
+
+    .modal-header h3 {
+        font-size: 1.3rem;
+    }
+
+    #attendanceForm {
+        padding: 16px 18px;
+        gap: 14px;
+    }
+
+    .modal-footer {
+        padding: 14px 18px;
+    }
+
+    .legend {
+        gap: 10px;
+        padding: 10px 12px;
+        font-size: 0.8rem;
+    }
+
+    .legend-color {
+        width: 10px;
+        height: 10px;
+    }
+}

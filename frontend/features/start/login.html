@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Focus Grid</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/start/home.css">
+    <link rel="stylesheet" href="../../styles/start/login.css">
+</head>
+
+<body>
+    <div class="login-container">
+        <h2>Welcome Boss</h2>
+        <p>Enter your details to access your dashboard.</p>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary login-btn">Sign In</button>
+        </form>
+
+        <div class="login-links">
+            <p>Don't have an account? <a href="reg.html">Sign up</a></p>
+        </div>
+    </div>
+
+    <script src="../../js/start/login.js"></script>
+</body>
+
+</html>

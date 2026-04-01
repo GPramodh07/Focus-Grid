@@ -1,0 +1,1096 @@
+/* Tasks Page Specific Styles */
+
+/* --- TOP CONTROLS --- */
+.top-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+}
+
+.controls-left h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+}
+
+.controls-right {
+    display: flex;
+    gap: 1rem;
+}
+
+/* --- CALENDAR --- */
+.calendar-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 20px;
+    border-radius: 12px;
+}
+
+.month-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.month-display {
+    font-size: 1.3rem;
+    font-weight: 700;
+    min-width: 150px;
+    text-align: center;
+    color: white;
+}
+
+.nav-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 12px;
+    padding: 20px;
+    border-radius: 16px;
+}
+
+.day-name {
+    text-align: center;
+    font-weight: 700;
+    padding: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1rem;
+}
+
+.calendar-day {
+    aspect-ratio: 1 / 0.9;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    /* Slight default background */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.calendar-day:hover:not(.empty) {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-4px);
+    border-color: rgba(139, 92, 246, 0.5);
+    /* Primary hover border */
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+}
+
+.calendar-day.empty {
+    cursor: default;
+    background: transparent;
+    border-color: transparent;
+}
+
+.calendar-day.today {
+    border: 2px solid var(--primary);
+    background: rgba(139, 92, 246, 0.1);
+}
+
+.day-number {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: white;
+}
+
+/* Task Badge/Indicator */
+.task-badge {
+    align-self: flex-start;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    margin-top: 8px;
+}
+
+.task-list-preview {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 8px;
+}
+
+.task-dot {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.task-dot::before {
+    content: "•";
+    color: var(--primary);
+    font-size: 1.2rem;
+    line-height: 0.5;
+}
+
+/* --- MODAL --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    width: 90%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: slideUpModal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpModal {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+}
+
+.modal-header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.close-modal {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: white;
+}
+
+.task-list-container {
+    min-height: 100px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+/* Scrollbar for Task List */
+.task-list-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.task-list-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.task-list-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.task-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.task-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+}
+
+.task-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(5px);
+    border-color: rgba(139, 92, 246, 0.3);
+}
+
+.task-checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.task-text {
+    flex: 1;
+    font-weight: 500;
+}
+
+.task-time {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    background: rgba(0, 0, 0, 0.2);
+    padding: 4px 8px;
+    border-radius: 8px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================
+   ENHANCED TASK MODAL STYLES (Large Popup)
+   ============================================ */
+
+.modal-content-large {
+    width: 92%;
+    max-width: 1100px;
+    padding: 0;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    animation: slideUpModal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    max-height: 90vh;
+    min-height: 500px;
+}
+
+.modal-content-large .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 24px 28px;
+    gap: 20px;
+}
+
+.modal-title-section {
+    flex: 1;
+}
+
+.modal-title-section h3 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: white;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.5px;
+}
+
+.task-count {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    font-weight: 500;
+}
+
+.task-list-container-large {
+    flex: 1;
+    min-height: 350px;
+    max-height: 600px;
+    overflow-y: auto;
+    padding: 24px 28px;
+}
+
+/* Scrollbar styling for task list */
+.task-list-container-large::-webkit-scrollbar {
+    width: 8px;
+}
+
+.task-list-container-large::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.task-list-container-large::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.3);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+.task-list-container-large::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 92, 246, 0.5);
+}
+
+.task-list-large {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Enhanced Task Card */
+.task-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 18px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), rgba(74, 144, 226, 0.08));
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    border-radius: 14px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    gap: 16px;
+}
+
+.task-card:hover {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(74, 144, 226, 0.15));
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
+    transform: translateY(-2px);
+}
+
+.task-card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.task-card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+    word-break: break-word;
+    letter-spacing: -0.3px;
+}
+
+.task-card-title.completed {
+    text-decoration: line-through;
+    opacity: 0.7;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.task-card-time {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.65);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.task-card-time::before {
+    content: "⏱";
+    font-size: 0.9rem;
+}
+
+.task-card-time.all-day::before {
+    content: "📅";
+}
+
+.task-card-description {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.task-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.task-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.task-btn:hover {
+    transform: translateY(-1px);
+}
+
+.task-btn-edit {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.task-btn-edit:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(59, 130, 246, 0.55);
+    color: #93c5fd;
+}
+
+.task-btn-delete {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.task-btn-delete:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(239, 68, 68, 0.5);
+    color: #fca5a5;
+}
+
+/* Empty state */
+.task-empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.05rem;
+    font-weight: 500;
+}
+
+.task-empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+    opacity: 0.3;
+}
+
+.modal-footer-large {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 16px 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 12px;
+}
+
+.modal-footer-large .btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+/* Task Checkbox Styles */
+.task-card-checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    flex-shrink: 0;
+}
+
+.task-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--primary);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.task-checkbox:hover {
+    transform: scale(1.1);
+}
+
+.task-checkbox:checked {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+/* ============================================
+   FORM MODAL STYLES (Add/Edit Task)
+   ============================================ */
+
+.modal-content {
+    width: 90%;
+    max-width: 550px;
+    padding: 0;
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    animation: slideUpModal 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 32px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-content .modal-header h3 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: white;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.modal-content .close-modal {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.modal-content .close-modal:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: white;
+    transform: none;
+}
+
+/* Task Form Styles */
+.task-form {
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.95);
+    letter-spacing: 0.2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="time"],
+.form-group textarea,
+.form-group select {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-group input[type="text"]::placeholder,
+.form-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.form-group input[type="text"]:hover,
+.form-group input[type="date"]:hover,
+.form-group input[type="time"]:hover,
+.form-group textarea:hover,
+.form-group select:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="date"]:focus,
+.form-group input[type="time"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+    max-height: 150px;
+    line-height: 1.5;
+    font-size: 0.95rem;
+}
+
+.form-group select {
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+}
+
+.form-group select option {
+    background-color: #2a2a2a;
+    color: white;
+    padding: 8px;
+}
+
+.form-group select option:hover {
+    background-color: rgba(139, 92, 246, 0.3);
+}
+
+.form-group select option:checked {
+    background: linear-gradient(#595959, #595959);
+    background-color: rgba(139, 92, 246, 0.2);
+}
+
+/* Date Picker Icon Highlight */
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 4px;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+    filter: invert(1) brightness(1.2);
+}
+
+.form-group input[type="date"]:hover::-webkit-calendar-picker-indicator {
+    opacity: 1;
+}
+
+.form-group input[type="date"]:focus::-webkit-calendar-picker-indicator {
+    opacity: 1;
+}
+
+/* Time Picker Icon - Plain White */
+.form-group input[type="time"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 4px;
+    opacity: 1;
+    transition: all 0.3s ease;
+    filter: invert(1) brightness(1);
+}
+
+.form-group input[type="time"]:hover::-webkit-calendar-picker-indicator {
+    opacity: 1;
+    filter: invert(1) brightness(1);
+}
+
+.form-group input[type="time"]:focus::-webkit-calendar-picker-indicator {
+    opacity: 1;
+    filter: invert(1) brightness(1);
+}
+
+/* Form Row (for side-by-side fields) */
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 600px) {
+    .row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 20px 32px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-footer .btn {
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.modal-footer .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.2);
+}
+
+.modal-footer .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+}
+
+.modal-footer .btn-primary:active {
+    transform: translateY(0);
+}
+
+.modal-footer .btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.modal-footer .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+/* Delete Button */
+#deleteTaskBtn {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #ef4444 !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+
+#deleteTaskBtn:hover {
+    background: rgba(239, 68, 68, 0.25) !important;
+    border-color: rgba(239, 68, 68, 0.5) !important;
+}
+
+/* ============================================
+   RESPONSIVE — TABLET (768px)
+   ============================================ */
+@media (max-width: 768px) {
+    .top-controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+        padding: 1.2rem 1.5rem;
+    }
+
+    .controls-right {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .calendar-grid {
+        gap: 8px;
+        padding: 15px;
+    }
+
+    .calendar-day {
+        padding: 8px;
+        min-height: auto;
+    }
+
+    .day-number {
+        font-size: 1rem;
+    }
+
+    .task-badge {
+        font-size: 0.7rem;
+        padding: 3px 6px;
+    }
+
+    .task-list-preview {
+        display: none;
+    }
+
+    /* Large modal — scale down */
+    .modal-content-large {
+        width: 95%;
+        max-width: 700px;
+        min-height: 400px;
+    }
+
+    .modal-content-large .modal-header {
+        padding: 18px 20px;
+    }
+
+    .modal-title-section h3 {
+        font-size: 1.3rem;
+    }
+
+    .task-list-container-large {
+        padding: 18px 20px;
+    }
+
+    .modal-footer-large {
+        padding: 14px 20px;
+    }
+
+    /* Form modal */
+    .modal-content .modal-header {
+        padding: 20px 24px;
+    }
+
+    .task-form {
+        padding: 20px 24px;
+    }
+
+    .modal-footer {
+        padding: 16px 24px;
+    }
+}
+
+/* ============================================
+   RESPONSIVE — MOBILE (425px)
+   ============================================ */
+@media (max-width: 425px) {
+    .dashboard-body {
+        padding: 0.75rem;
+    }
+
+    .top-controls {
+        padding: 0.75rem 1rem;
+        gap: 0.6rem;
+        margin-bottom: 1rem;
+    }
+
+    .controls-left h3 {
+        font-size: 1.15rem;
+    }
+
+    .controls-right {
+        gap: 0.5rem;
+    }
+
+    .controls-right .btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .calendar-container {
+        gap: 0.75rem;
+    }
+
+    .calendar-header {
+        padding: 8px 10px;
+    }
+
+    .month-nav {
+        gap: 12px;
+    }
+
+    .month-display {
+        font-size: 0.95rem;
+        min-width: 90px;
+    }
+
+    .nav-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 0.95rem;
+    }
+
+    .calendar-grid {
+        gap: 3px;
+        padding: 6px;
+    }
+
+    .day-name {
+        font-size: 0.7rem;
+        padding: 4px 1px;
+    }
+
+    .calendar-day {
+        padding: 4px;
+        border-radius: 6px;
+        aspect-ratio: auto;
+        min-height: 52px;
+        min-width: 0;
+        /* Allows text truncation to work inside CSS grid */
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .calendar-day:hover:not(.empty) {
+        transform: none;
+    }
+
+    .day-number {
+        font-size: 0.85rem;
+    }
+
+    .task-badge {
+        font-size: 0.5rem;
+        padding: 1px 3px;
+        margin-top: 3px;
+        border-radius: 4px;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .task-list-preview {
+        display: none;
+    }
+
+    /* Large modal — nearly full-screen */
+    .modal-content-large {
+        width: 98%;
+        max-width: none;
+        min-height: 350px;
+        max-height: 95vh;
+        border-radius: 18px;
+    }
+
+    .modal-content-large .modal-header {
+        padding: 14px 16px;
+        gap: 12px;
+    }
+
+    .modal-title-section h3 {
+        font-size: 1.15rem;
+    }
+
+    .task-list-container-large {
+        padding: 14px 16px;
+        min-height: 250px;
+    }
+
+    .task-card {
+        padding: 10px 12px;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .task-card-title {
+        font-size: 0.95rem;
+    }
+
+    .task-card-time {
+        font-size: 0.75rem;
+    }
+
+    .task-card-description {
+        font-size: 0.75rem;
+    }
+
+    .task-card-actions {
+        width: 100%;
+        justify-content: flex-end;
+        margin-top: -6px;
+    }
+
+    .task-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .modal-footer-large {
+        padding: 12px 16px;
+    }
+
+    /* Form modal */
+    .modal-content {
+        width: 95%;
+        border-radius: 18px;
+    }
+
+    .modal-content .modal-header {
+        padding: 16px 18px;
+    }
+
+    .modal-content .modal-header h3 {
+        font-size: 1.3rem;
+    }
+
+    .task-form {
+        padding: 16px 18px;
+        gap: 16px;
+    }
+
+    .row {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-footer {
+        padding: 14px 18px;
+    }
+
+    .modal-footer .btn {
+        padding: 10px 18px;
+        font-size: 0.9rem;
+    }
+}

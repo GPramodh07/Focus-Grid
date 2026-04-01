@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Calendar - Focus Grid</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/start/home.css">
+    <link rel="stylesheet" href="../../styles/start/dashboard.css">
+    <link rel="stylesheet" href="../../styles/attendance/calendar.css">
+</head>
+
+<body>
+    <!-- Top Header -->
+    <header class="top-header glass-panel">
+        <div class="header-left">
+            <div class="header-logo">
+                <h2>Focus Grid</h2>
+            </div>
+            <button id="sidebarToggle" class="menu-toggle-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <div class="header-greeting">
+            <h3>Attendance</h3>
+            <div class="motivating-line">
+                ✨ Manage your daily progress for this subject.
+            </div>
+        </div>
+
+        <div class="user-profile">
+            <div class="user-info">
+                <span class="name" id="headerName">Boss User</span>
+                <span class="username" id="headerUsername">@boss_user</span>
+            </div>
+            <div class="avatar" id="headerAvatar">BU</div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Sidebar / Menu -->
+        <aside class="sidebar glass-panel">
+            <div class="sidebar-header">
+                <h2 class="sidebar-logo">Focus Grid</h2>
+                <button class="sidebar-close-btn" aria-label="Close sidebar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="sidebar-nav-container">
+                <nav class="sidebar-menu">
+                    <a href="../start/dashboard.html" class="menu-item">Dashboard</a>
+                    <a href="../plan_day/tasks.html" class="menu-item">Plan Day</a>
+                    <a href="subjects.html" class="menu-item active">Attendance</a>
+                    <!-- <a href="#" class="menu-item">Focus Mode</a>
+                    <a href="#" class="menu-item">Progress</a> -->
+                    <a href="../time_table/table.html" class="menu-item">Time Table</a>
+                </nav>
+                <div class="sidebar-footer">
+                    <a href="../start/login.html" class="menu-item logout">Logout</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="dashboard-body">
+                <div class="calendar-container">
+                    <div class="calendar-header glass-panel">
+                        <div class="month-nav">
+                            <button class="nav-btn" id="prevMonth">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            </button>
+                            <div class="month-display" id="monthDisplay">March 2026</div>
+                            <div class="subject-month-divider"></div>
+                            <div class="subject-display" id="subjectHeaderName">Mathematics</div>
+                            <button class="nav-btn" id="nextMonth">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </button>
+                        </div>
+                        <a href="subjects.html" class="btn btn-secondary">Back to Subjects</a>
+                    </div>
+
+                    <div class="legend glass-panel">
+                        <div class="legend-item"><div class="legend-color status-present-indicator"></div> Present</div>
+                        <div class="legend-item"><div class="legend-color status-absent-indicator"></div> Absent</div>
+                        <div class="legend-item"><div class="legend-color status-note-indicator"></div> Note</div>
+                    </div>
+
+                    <div class="calendar-grid glass-panel" id="calendarGrid">
+                        <!-- Calendar will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Attendance Modal -->
+    <div class="modal-overlay" id="attendanceModal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3 id="modalDateDisplay">Mark Attendance</h3>
+                <button class="close-modal" id="closeModal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <form id="attendanceForm">
+                <input type="hidden" id="recordId">
+                <input type="hidden" id="selectedDate">
+                
+                <div class="form-group">
+                    <label for="hours">Hours</label>
+                    <input type="number" id="hours" min="0" max="24" value="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status" required>
+                        <option value="present">Present</option>
+                        <option value="absent">Absent</option>
+                        <option value="note">Note</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="note">Note (Optional)</label>
+                    <textarea id="note" placeholder="Write something..."></textarea>
+                </div>
+            </form>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="deleteAttendanceBtn" style="display: none; background: #ef4444;">Delete</button>
+                <button type="submit" class="btn btn-primary" form="attendanceForm">Save Attendance</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../js/attendance/calendar.js"></script>
+</body>
+
+</html>
