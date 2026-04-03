@@ -120,7 +120,7 @@
             if (!userId) return;
 
             try {
-                const response = await fetch(`http://localhost:5000/api/user/profile?user_id=${encodeURIComponent(userId)}`);
+                const response = await fetch(`${API_CONFIG.ENDPOINTS.USER.PROFILE}?user_id=${encodeURIComponent(userId)}`);
                 const data = await response.json();
                 if (response.ok && data.success && data.user) {
                     nameInput.value = data.user.name || nameInput.value;
@@ -203,7 +203,7 @@
                 }
 
                 try {
-                    const response = await fetch('http://localhost:5000/api/user/update-profile', {
+                    const response = await fetch(API_CONFIG.ENDPOINTS.USER.UPDATE_PROFILE, {
                         method: 'PATCH',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({

@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         headerAvatar.textContent = initials;
     }
 
-    const API_BASE_URL = 'http://localhost:5000/api';
+    const API_BASE_URL = API_CONFIG.ENDPOINTS.SUBJECTS;
 
     // Modal Elements
     const subjectModal = document.getElementById('subjectModal');

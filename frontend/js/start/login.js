@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
             loginBtn.disabled = true;
 
             try {
-                const response = await fetch('http://localhost:5000/login', {
+                const response = await fetch(API_CONFIG.ENDPOINTS.AUTH.LOGIN, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username, password })

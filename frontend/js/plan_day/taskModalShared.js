@@ -17,7 +17,7 @@
     function initTaskModal(config) {
         const settings = Object.assign({
             userId: null,
-            apiUrl: 'http://localhost:5000/api/tasks',
+            apiUrl: API_CONFIG.ENDPOINTS.TASKS,
             openTriggerSelector: '#addTaskBtn',
             onTaskSaved: null,
             onTaskDeleted: null

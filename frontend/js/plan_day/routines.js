@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const routineSubmitBtn = routineForm ? routineForm.querySelector('button[type="submit"]') : null;
 
 	let routines = [];
-	const API_URL = 'http://localhost:5000/api/routines';
+	const API_URL = API_CONFIG.ENDPOINTS.ROUTINES;
 
 	const userStr = localStorage.getItem('focusGridUser');
 	let userId = null;

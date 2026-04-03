@@ -7,7 +7,7 @@
     function initRoutineModal(config) {
         const settings = Object.assign({
             userId: null,
-            apiUrl: 'http://localhost:5000/api/routines',
+            apiUrl: API_CONFIG.ENDPOINTS.ROUTINES,
             openTriggerSelector: '#addRoutineBtn',
             onRoutineSaved: null
         }, config || {});

@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	// API endpoint
-	const API_URL = 'http://localhost:5000/api/timetable';
+	const API_URL = API_CONFIG.ENDPOINTS.TIMETABLE;
 	const TIMETABLE_START_HOUR = 8;
 	const TIMETABLE_END_HOUR = 18;
 	const SLOT_COUNT = TIMETABLE_END_HOUR - TIMETABLE_START_HOUR;

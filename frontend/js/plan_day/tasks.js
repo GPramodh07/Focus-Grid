@@ -59,8 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
        userId = localStorage.getItem('user_id') || 1; // Default fallback for dev
     }
 
-    // Point to backend server on port 5000
-    const API_URL = "http://localhost:5000/api/tasks";
+    // Point to backend server
+    const API_URL = API_CONFIG.ENDPOINTS.TASKS;
 
     // Keep date handling in plain YYYY-MM-DD to avoid timezone shifts.
     function getLocalDateString(dateObj = new Date()) {
