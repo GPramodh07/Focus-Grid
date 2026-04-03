@@ -1,0 +1,32 @@
+<div class="modal-overlay" id="updateProfileModal" style="display: none;">
+    <div class="modal-content glass-panel update-profile-modal-content" role="dialog" aria-modal="true" aria-labelledby="updateProfileTitle">
+        <div class="modal-header">
+            <h3 id="updateProfileTitle">Update Profile</h3>
+            <button class="close-modal" id="closeUpdateProfileModal" type="button" aria-label="Close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <form id="updateProfileForm" class="task-form">
+            <div id="updateProfileError" class="form-inline-error" role="alert" aria-live="polite"></div>
+            <div class="form-group">
+                <label for="profileName">Name</label>
+                <input type="text" id="profileName" required>
+            </div>
+            <div class="form-group">
+                <label for="profileUsername">Username</label>
+                <input type="text" id="profileUsername" required>
+            </div>
+            <div class="form-group">
+                <label for="profilePassword">Password</label>
+                <input type="password" id="profilePassword" placeholder="Leave blank to keep current password">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelUpdateProfileBtn">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="saveUpdateProfileBtn">Update Profile</button>
+            </div>
+        </form>
+    </div>
+</div>

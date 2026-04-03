@@ -52,6 +52,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		userId = localStorage.getItem('user_id') || 1;
 	}
 
+	const routineModalApi = window.FocusGridRoutineModal
+		? window.FocusGridRoutineModal.init({
+			userId,
+			apiUrl: API_URL,
+			openTriggerSelector: '#addRoutineBtn',
+			onRoutineSaved: async () => {
+				await loadRoutines();
+			}
+		})
+		: { openRoutineModal: () => {}, closeRoutineModal: () => {} };
+
 	if (sidebarToggle && sidebar) {
 		sidebarToggle.addEventListener('click', () => {
 			sidebar.classList.toggle('collapsed');
@@ -77,21 +88,21 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
-	if (addRoutineBtn) {
+	if (addRoutineBtn && !window.FocusGridRoutineModal) {
 		addRoutineBtn.addEventListener('click', () => {
 			openRoutineModal();
 		});
 	}
 
-	if (closeRoutineModal) {
+	if (closeRoutineModal && !window.FocusGridRoutineModal) {
 		closeRoutineModal.addEventListener('click', closeModal);
 	}
 
-	if (cancelRoutineBtn) {
+	if (cancelRoutineBtn && !window.FocusGridRoutineModal) {
 		cancelRoutineBtn.addEventListener('click', closeModal);
 	}
 
-	if (routineModal) {
+	if (routineModal && !window.FocusGridRoutineModal) {
 		routineModal.addEventListener('click', event => {
 			if (event.target === routineModal) {
 				closeModal();
@@ -116,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 
 			if (editBtn) {
-				openRoutineModal(routine);
+				routineModalApi.openRoutineModal(routine);
 				return;
 			}
 
@@ -151,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
-	if (routineForm) {
+	if (routineForm && !window.FocusGridRoutineModal) {
 		routineTitleInput.addEventListener('input', () => {
 			clearRoutineFormError();
 			if (routineSubmitBtn) {

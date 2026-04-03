@@ -143,3 +143,19 @@ exports.deleteByIdAndUser = (id, userId, callback) => {
         db.query(query, [id, userId], callback);
     });
 };
+
+exports.getClassesByDay = (userId, dayOfWeek, callback) => {
+    ensureTable((tableErr) => {
+        if (tableErr) return callback(tableErr);
+
+        const query = `
+            SELECT title, start_time, end_time, color, type
+            FROM timetable
+            WHERE user_id = ?
+              AND day_of_week = ?
+            ORDER BY start_time ASC
+        `;
+
+        db.query(query, [userId, dayOfWeek], callback);
+    });
+};

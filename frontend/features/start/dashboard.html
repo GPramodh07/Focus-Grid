@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/start/home.css">
     <link rel="stylesheet" href="../../styles/start/dashboard.css">
+    <link rel="stylesheet" href="../../styles/start/updateprofile.css">
 </head>
 
 <body>
@@ -71,36 +72,504 @@
         <main class="main-content">
             <!-- Dashboard Body / Blocks -->
             <div class="dashboard-body">
-                <div class="dashboard-grid">
-                    <!-- Subject Wise Attendance Block -->
-                    <div class="dashboard-block glass-panel">
-                        <h3>Subject Wise Attendance</h3>
-                        <p>Monitor your attendance percentage for each of your subjects.</p>
+                <!-- Today's Date Header -->
+                <div class="today-date">
+                    <h2 id="todayDateDisplay">Friday, April 3</h2>
+                </div>
+
+                <!-- Today's Overview Section -->
+                <section class="dashboard-section">
+                    <h3 class="section-title">Today's Overview</h3>
+                    <div class="overview-cards">
+                        <div class="summary-card glass-panel">
+                            <div class="card-icon tasks-icon">📋</div>
+                            <div class="card-content">
+                                <p class="card-label">Total Tasks</p>
+                                <p class="card-value" id="totalTasksCount">8</p>
+                            </div>
+                        </div>
+                        <div class="summary-card glass-panel">
+                            <div class="card-icon classes-icon">📚</div>
+                            <div class="card-content">
+                                <p class="card-label">Total Classes Today</p>
+                                <p class="card-value" id="totalClassesCount">6</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Main Grid Container: 2-column on desktop, 1-column on mobile -->
+                <div class="dashboard-main-grid">
+                    <!-- Left Column: Classes + Tasks -->
+                    <div class="dashboard-left-column">
+                        <!-- Today's Classes Section -->
+                        <section class="dashboard-section">
+                            <h3 class="section-title">Today's Classes</h3>
+                            <div class="classes-list glass-panel" id="todayClassesList"></div>
+                        </section>
+
+                        <!-- Today's Tasks Section -->
+                        <section class="dashboard-section">
+                            <h3 class="section-title">Today's Tasks</h3>
+                            <div class="tasks-list glass-panel" id="todayTasksList"></div>
+                        </section>
                     </div>
 
-                    <!-- Today's Classes Block -->
-                    <div class="dashboard-block glass-panel">
-                        <h3>Today's Classes</h3>
-                        <p>Your schedule and upcoming lectures for today.</p>
-                    </div>
-
-                    <!-- Today's Goal Block -->
-                    <div class="dashboard-block glass-panel">
-                        <h3>Today's Goal</h3>
-                        <p>Your main objectives and tasks to complete by the end of the day.</p>
-                    </div>
-
-                    <!-- Progress Block -->
-                    <div class="dashboard-block glass-panel">
-                        <h3>Progress</h3>
-                        <p>Track your overall performance and consistency over time.</p>
+                    <!-- Right Column: Attendance Summary -->
+                    <div class="dashboard-right-column">
+                        <!-- Attendance Summary Section -->
+                        <section class="dashboard-section">
+                            <h3 class="section-title">Attendance Summary</h3>
+                            <div class="attendance-list glass-panel" id="attendanceSummaryList">
+                            </div>
+                        </section>
                     </div>
                 </div>
+
+                <section class="dashboard-section quick-actions-section">
+                    <h3 class="section-title">Quick Actions</h3>
+                    <div class="quick-actions-grid">
+                        <button type="button" class="quick-action-card glass-panel" id="dashboardAddTaskBtn">
+                            <span class="quick-action-icon" aria-hidden="true">+</span>
+                            <span class="quick-action-text">Add Task</span>
+                        </button>
+                        <button type="button" class="quick-action-card glass-panel" id="dashboardAddRoutineBtn">
+                            <span class="quick-action-icon" aria-hidden="true">R</span>
+                            <span class="quick-action-text">Add Routine</span>
+                        </button>
+                    </div>
+                </section>
             </div>
         </main>
     </div>
 
+    <div class="modal-overlay" id="taskFormModal" style="display: none;">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3 id="formModalTitle">Add New Task</h3>
+                <button class="close-modal" id="closeTaskFormModal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <form id="taskForm" class="task-form">
+                <input type="hidden" id="taskId">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="taskTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="taskDesc" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" id="taskDate" required>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label>Start Time</label>
+                        <input type="time" id="taskStart">
+                    </div>
+                    <div class="form-group">
+                        <label>End Time</label>
+                        <input type="time" id="taskEnd">
+                    </div>
+                </div>
+                <div class="form-group" id="statusGroup" style="display: none;">
+                    <label>Status</label>
+                    <select id="taskStatus">
+                        <option value="pending">Pending</option>
+                        <option value="missed">Missed</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="deleteTaskBtn" style="display: none;">Delete</button>
+                    <button type="submit" class="btn btn-primary">Save Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="routineModal" style="display: none;">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3 id="routineModalTitle">Add Routine</h3>
+                <button class="close-modal" id="closeRoutineModal" type="button" aria-label="Close">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <form id="routineForm" class="task-form">
+                <input type="hidden" id="routineId">
+                <div id="routineFormError" class="form-inline-error" role="alert" aria-live="polite"></div>
+                <div class="form-group">
+                    <label for="routineTitle">Title</label>
+                    <input type="text" id="routineTitle" required>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label for="routineStartTime">Start Time</label>
+                        <input type="time" id="routineStartTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="routineEndTime">End Time</label>
+                        <input type="time" id="routineEndTime" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelRoutineBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Routine</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../../js/plan_day/taskModalShared.js"></script>
+    <script src="../../js/plan_day/routineModalShared.js"></script>
+    <script src="../../js/start/updateprofile.js"></script>
     <script>
+        const DASHBOARD_API_BASE = 'http://localhost:5000/api/dashboard';
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function getCurrentUserId() {
+            const userStr = localStorage.getItem('focusGridUser');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    if (user && user.id) return user.id;
+                } catch (error) {
+                    console.error('Error parsing user data:', error);
+                }
+            }
+
+            return localStorage.getItem('user_id') || 1;
+        }
+
+        function formatTimeHHMM(timeValue) {
+            if (!timeValue || typeof timeValue !== 'string') return '--:--';
+            const parts = timeValue.split(':');
+            if (parts.length < 2) return '--:--';
+
+            const hh = parts[0].padStart(2, '0');
+            const mm = parts[1].padStart(2, '0');
+            return `${hh}:${mm}`;
+        }
+
+        function updateTotalClassesCount(classes) {
+            const totalClassesCount = document.getElementById('totalClassesCount');
+            if (!totalClassesCount) return;
+
+            if (!Array.isArray(classes) || classes.length === 0) {
+                totalClassesCount.textContent = '0';
+                return;
+            }
+
+            const classCount = classes.filter((item) => (item.type || 'class').toLowerCase() === 'class').length;
+            totalClassesCount.textContent = String(classCount);
+        }
+
+        function updateTotalTasksCount(tasks) {
+            const totalTasksCount = document.getElementById('totalTasksCount');
+            if (!totalTasksCount) return;
+
+            if (!Array.isArray(tasks) || tasks.length === 0) {
+                totalTasksCount.textContent = '0';
+                return;
+            }
+
+            totalTasksCount.textContent = String(tasks.length);
+        }
+
+        function formatTaskTimeRange(startTime, endTime) {
+            const hasStart = Boolean(startTime);
+            const hasEnd = Boolean(endTime);
+
+            if (!hasStart && !hasEnd) return '';
+
+            const start = hasStart ? formatTimeHHMM(startTime) : '';
+            const end = hasEnd ? formatTimeHHMM(endTime) : '';
+
+            if (start && end) return `${start}-${end}`;
+            return start || end;
+        }
+
+        function renderNoTasks() {
+            const list = document.getElementById('todayTasksList');
+            if (!list) return;
+
+            updateTotalTasksCount([]);
+
+            list.innerHTML = `
+                <div class="task-item task-item-empty">
+                    <div class="task-label">
+                        <span class="task-title">No tasks for today</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderTodayTasks(tasks) {
+            const list = document.getElementById('todayTasksList');
+            if (!list) return;
+
+            updateTotalTasksCount(tasks);
+
+            if (!Array.isArray(tasks) || tasks.length === 0) {
+                renderNoTasks();
+                return;
+            }
+
+            const itemsHtml = tasks.map((task) => {
+                const taskId = Number(task.id);
+                const safeTitle = escapeHtml(task.title || 'Untitled task');
+                const timeRange = formatTaskTimeRange(task.start_time, task.end_time);
+                const isCompleted = String(task.status || '').toLowerCase() === 'completed';
+
+                return `
+                    <div class="task-item">
+                        <input
+                            type="checkbox"
+                            class="task-checkbox"
+                            id="task-${taskId}"
+                            data-task-id="${taskId}"
+                            ${isCompleted ? 'checked' : ''}
+                        >
+                        <label for="task-${taskId}" class="task-label">
+                            <span class="task-title">${safeTitle}</span>
+                            ${timeRange ? `<span class="task-time">${escapeHtml(timeRange)}</span>` : ''}
+                        </label>
+                    </div>
+                `;
+            }).join('');
+
+            list.innerHTML = itemsHtml;
+            initializeTaskCheckboxes();
+        }
+
+        async function loadTodayTasks() {
+            const userId = getCurrentUserId();
+            const url = `${DASHBOARD_API_BASE}/today-tasks?user_id=${encodeURIComponent(userId)}`;
+
+            try {
+                const response = await fetch(url);
+                const payload = await response.json();
+
+                if (!response.ok || !payload.success) {
+                    renderNoTasks();
+                    return;
+                }
+
+                renderTodayTasks(payload.data || []);
+            } catch (error) {
+                console.error('Error loading today tasks:', error);
+                renderNoTasks();
+            }
+        }
+
+        function renderNoClasses() {
+            const list = document.getElementById('todayClassesList');
+            if (!list) return;
+
+            updateTotalClassesCount([]);
+
+            list.innerHTML = `
+                <div class="class-item class-item-empty">
+                    <div class="class-info">
+                        <p class="class-name">No classes today</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderTodayClasses(classes) {
+            const list = document.getElementById('todayClassesList');
+            if (!list) return;
+
+            updateTotalClassesCount(classes);
+
+            if (!Array.isArray(classes) || classes.length === 0) {
+                renderNoClasses();
+                return;
+            }
+
+            const itemsHtml = classes.map((item) => {
+                const title = escapeHtml(item.title || 'Class');
+                const start = formatTimeHHMM(item.start_time);
+                const end = formatTimeHHMM(item.end_time);
+                const color = /^#[0-9a-fA-F]{6}$/.test(String(item.color || '').trim())
+                    ? String(item.color).trim()
+                    : '#8b5cf6';
+
+                return `
+                    <div class="class-item">
+                        <div class="class-color-indicator" style="background: ${escapeHtml(color)};"></div>
+                        <div class="class-info">
+                            <p class="class-name">${title}</p>
+                            <p class="class-time">${start}-${end}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            list.innerHTML = itemsHtml;
+        }
+
+        async function loadTodayClasses() {
+            const userId = getCurrentUserId();
+            const url = `${DASHBOARD_API_BASE}/today-classes?user_id=${encodeURIComponent(userId)}`;
+
+            try {
+                const response = await fetch(url);
+                const payload = await response.json();
+
+                if (!response.ok || !payload.success) {
+                    renderNoClasses();
+                    return;
+                }
+
+                renderTodayClasses(payload.data || []);
+            } catch (error) {
+                console.error('Error loading today classes:', error);
+                renderNoClasses();
+            }
+        }
+
+        function getAttendanceColor(percentage) {
+            if (percentage >= 90) {
+                return '#10b981';
+            }
+
+            if (percentage < 75 && percentage >= 65) {
+                return '#f59e0b';
+            }
+
+            if (percentage < 65 && percentage > 0) {
+                return '#ef4444';
+            }
+
+            return 'var(--primary)';
+        }
+
+        function renderNoAttendanceSummary() {
+            const list = document.getElementById('attendanceSummaryList');
+            if (!list) return;
+
+            list.innerHTML = `
+                <div class="attendance-item">
+                    <div class="attendance-subject">
+                        <p class="subject-name">No subjects available</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderAttendanceSummary(summaryList) {
+            const list = document.getElementById('attendanceSummaryList');
+            if (!list) return;
+
+            if (!Array.isArray(summaryList) || summaryList.length === 0) {
+                renderNoAttendanceSummary();
+                return;
+            }
+
+            const itemsHtml = summaryList.map((item) => {
+                const subjectName = escapeHtml(item.subject_name || 'Untitled subject');
+                const percentageValue = Number(item.attendance_percentage);
+                const percentage = Number.isFinite(percentageValue)
+                    ? Math.max(0, Math.min(100, Math.round(percentageValue)))
+                    : 0;
+                const color = getAttendanceColor(percentage);
+
+                return `
+                    <div class="attendance-item">
+                        <div class="attendance-subject">
+                            <p class="subject-name">${subjectName}</p>
+                        </div>
+                        <div class="attendance-bar">
+                            <div class="attendance-progress" style="width: ${percentage}%; background: ${color}; box-shadow: 0 2px 8px ${color}55;"></div>
+                        </div>
+                        <p class="attendance-percentage" style="color: ${color};">${percentage}%</p>
+                    </div>
+                `;
+            }).join('');
+
+            list.innerHTML = itemsHtml;
+        }
+
+        async function loadAttendanceSummary() {
+            const userId = getCurrentUserId();
+            const url = `${DASHBOARD_API_BASE}/attendance-summary?user_id=${encodeURIComponent(userId)}`;
+
+            try {
+                const response = await fetch(url);
+                const payload = await response.json();
+
+                if (!response.ok || !payload.success) {
+                    renderNoAttendanceSummary();
+                    return;
+                }
+
+                renderAttendanceSummary(payload.data || []);
+            } catch (error) {
+                console.error('Error loading attendance summary:', error);
+                renderNoAttendanceSummary();
+            }
+        }
+
+        function initDashboardTaskQuickAction() {
+            if (!window.FocusGridTaskModal) return;
+
+            window.FocusGridTaskModal.init({
+                userId: getCurrentUserId(),
+                apiUrl: 'http://localhost:5000/api/tasks',
+                openTriggerSelector: '#dashboardAddTaskBtn',
+                onTaskSaved: (payload) => {
+                    loadTodayTasks();
+
+                    const today = new Date();
+                    const y = today.getFullYear();
+                    const m = String(today.getMonth() + 1).padStart(2, '0');
+                    const d = String(today.getDate()).padStart(2, '0');
+                    const todayStr = `${y}-${m}-${d}`;
+
+                    if (payload && payload.task_date === todayStr) {
+                        loadTodayTasks();
+                    }
+                }
+            });
+        }
+
+        function initDashboardRoutineQuickAction() {
+            if (!window.FocusGridRoutineModal) return;
+
+            window.FocusGridRoutineModal.init({
+                userId: getCurrentUserId(),
+                apiUrl: 'http://localhost:5000/api/routines',
+                openTriggerSelector: '#dashboardAddRoutineBtn'
+            });
+        }
+
+        // Set today's date
+        const todayDateDisplay = document.getElementById('todayDateDisplay');
+        if (todayDateDisplay) {
+            const today = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = today.toLocaleDateString('en-US', options);
+            todayDateDisplay.textContent = formattedDate;
+        }
+
+        // Sidebar toggle functionality
         const sidebarToggle = document.getElementById('sidebarToggle');
         const sidebar = document.querySelector('.sidebar');
 
@@ -120,6 +589,61 @@
                 sidebar.classList.add('collapsed');
             });
         }
+
+        // ========== Today's Tasks Checkbox Handling ==========
+        function initializeTaskCheckboxes() {
+            const taskCheckboxes = document.querySelectorAll('#todayTasksList .task-checkbox');
+
+            taskCheckboxes.forEach((checkbox) => {
+                if (checkbox.dataset.bound === 'true') return;
+                checkbox.dataset.bound = 'true';
+
+                checkbox.addEventListener('change', () => {
+                    if (checkbox.dataset.syncing === 'true') return;
+
+                    const taskId = Number(checkbox.dataset.taskId);
+                    const previousChecked = !checkbox.checked;
+                    const nextStatus = checkbox.checked ? 'completed' : 'pending';
+
+                    if (!Number.isInteger(taskId) || taskId <= 0) {
+                        checkbox.checked = previousChecked;
+                        return;
+                    }
+
+                    checkbox.dataset.syncing = 'true';
+                    checkbox.disabled = true;
+
+                    const userId = getCurrentUserId();
+                    fetch(`http://localhost:5000/api/tasks/${encodeURIComponent(taskId)}/status?user_id=${encodeURIComponent(userId)}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status: nextStatus })
+                    })
+                        .then(async (response) => {
+                            const payload = await response.json().catch(() => ({}));
+                            if (!response.ok || !payload.success) {
+                                throw new Error(payload.message || payload.error || 'Failed to update task status');
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error updating task status:', error);
+                            checkbox.checked = previousChecked;
+                        })
+                        .finally(() => {
+                            checkbox.dataset.syncing = 'false';
+                            checkbox.disabled = false;
+                        });
+                });
+            });
+        }
+
+        loadTodayClasses();
+        loadTodayTasks();
+        loadAttendanceSummary();
+        initDashboardTaskQuickAction();
+        initDashboardRoutineQuickAction();
     </script>
 </body>
 

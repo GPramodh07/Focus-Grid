@@ -25,6 +25,41 @@ exports.getAttendancePercentageBySubject = (subjectId) => {
     });
 };
 
+exports.getAttendanceSummaryByUser = (userId) => {
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT
+                s.id AS subject_id,
+                s.subject_name,
+                COALESCE(SUM(a.status = 'present'), 0) AS presents,
+                COALESCE(SUM(a.status = 'absent'), 0) AS absents
+            FROM subjects s
+            LEFT JOIN attendance a ON a.subject_id = s.id
+            WHERE s.user_id = ?
+            GROUP BY s.id, s.subject_name
+            ORDER BY s.id ASC
+        `;
+
+        db.query(query, [userId], (error, results) => {
+            if (error) return reject(error);
+            resolve(results);
+        });
+    });
+};
+
+exports.calculateAttendancePercentage = (stats) => {
+    const presents = parseInt(stats && stats.presents, 10) || 0;
+    const absents = parseInt(stats && stats.absents, 10) || 0;
+    const total = presents + absents;
+    const percentage = total > 0 ? Math.round((presents / total) * 100) : 0;
+
+    return {
+        presents,
+        absents,
+        percentage
+    };
+};
+
 exports.addAttendance = (subject_id, class_date, hours, status, note) => {
     return new Promise((resolve, reject) => {
         db.query(

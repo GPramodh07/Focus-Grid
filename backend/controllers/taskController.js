@@ -80,3 +80,30 @@ exports.deleteTask = (req, res) => {
         res.json({ success: true, message: 'Task deleted' });
     });
 };
+
+exports.updateTaskStatus = (req, res) => {
+    const userId = req.user.id;
+    const taskId = Number(req.params.id);
+    const { status } = req.body;
+
+    if (!Number.isInteger(taskId) || taskId <= 0) {
+        return res.status(400).json({ success: false, message: 'Invalid task id' });
+    }
+
+    const normalizedStatus = String(status || '').trim().toLowerCase();
+    if (!['pending', 'completed'].includes(normalizedStatus)) {
+        return res.status(400).json({ success: false, message: 'Invalid status value' });
+    }
+
+    Task.updateTaskStatus(taskId, userId, normalizedStatus, (err, result) => {
+        if (err) {
+            return sendDbError(res, 'Error updating task status', err);
+        }
+
+        if (!result || result.affectedRows === 0) {
+            return res.status(404).json({ success: false, message: 'Task not found' });
+        }
+
+        return res.json({ success: true, message: 'Task status updated' });
+    });
+};

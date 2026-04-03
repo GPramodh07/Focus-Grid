@@ -1,4 +1,5 @@
 const userModel = require("../models/userModel");
+const bcrypt = require("bcrypt");
 
 exports.login = async (req, res) => {
     const { username, password } = req.body;
@@ -12,7 +13,13 @@ exports.login = async (req, res) => {
         
         if (result.length > 0) {
             const user = result[0];
-            if (user.password === password) {
+            const storedPassword = String(user.password || "");
+            const isHashed = storedPassword.startsWith("$2a$") || storedPassword.startsWith("$2b$") || storedPassword.startsWith("$2y$");
+            const isValidPassword = isHashed
+                ? await bcrypt.compare(password, storedPassword)
+                : storedPassword === password;
+
+            if (isValidPassword) {
                 return res.json({ success: true, message: "Login successful", user: { id: user.id, username: user.username, name: user.name } });
             } else {
                 return res.status(401).json({ success: false, message: "Incorrect password" });
@@ -39,7 +46,8 @@ exports.register = async (req, res) => {
             return res.status(409).json({ success: false, message: "Username already exists" });
         }
 
-        await userModel.createUser(name, username, password);
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await userModel.createUser(name, username, hashedPassword);
         return res.status(201).json({ success: true, message: "Registration successful" });
     } catch (error) {
         console.error("Registration error:", error);

@@ -9,6 +9,7 @@ router.use(authMiddleware.verifyUser);
 router.get('/', taskController.getAllTasks);
 router.get('/:date', taskController.getTasksByDate);
 router.post('/', taskController.createTask);
+router.patch('/:id/status', taskController.updateTaskStatus);
 router.put('/:id', taskController.updateTask);
 router.delete('/:id', taskController.deleteTask);
 

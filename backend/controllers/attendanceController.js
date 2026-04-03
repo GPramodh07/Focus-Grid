@@ -23,11 +23,7 @@ exports.getAttendancePercentage = async (req, res) => {
 
     try {
         const stats = await attendanceModel.getAttendancePercentageBySubject(subjectId);
-        
-        const presents = parseInt(stats.presents) || 0;
-        const absents = parseInt(stats.absents) || 0;
-        const total = presents + absents;
-        const percentage = total > 0 ? Math.round((presents / total) * 100) : 0;
+        const { presents, absents, percentage } = attendanceModel.calculateAttendancePercentage(stats);
 
         res.json({
             success: true,

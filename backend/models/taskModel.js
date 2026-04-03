@@ -96,3 +96,30 @@ exports.deleteTask = (id, userId, callback) => {
     const query = 'DELETE FROM tasks WHERE id = ? AND user_id = ?';
     db.query(query, [id, userId], callback);
 };
+
+exports.getTodayTasks = (userId, date, callback) => {
+    const query = `
+        SELECT id, title, start_time, end_time, status
+        FROM tasks
+        WHERE user_id = ?
+          AND task_date = ?
+        ORDER BY start_time ASC
+    `;
+
+    db.query(query, [userId, date], (err, result) => {
+        if (err) {
+            console.error('[TASK-MODEL] getTodayTasks query failed:', err.message);
+        }
+        callback(err, result);
+    });
+};
+
+exports.updateTaskStatus = (taskId, userId, status, callback) => {
+    const query = `
+        UPDATE tasks
+        SET status = ?
+        WHERE id = ? AND user_id = ?
+    `;
+
+    db.query(query, [status, taskId, userId], callback);
+};

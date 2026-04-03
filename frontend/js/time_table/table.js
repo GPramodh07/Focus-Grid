@@ -283,6 +283,164 @@ document.addEventListener('DOMContentLoaded', () => {
 				`;
 			}
 		});
+
+		// Sync mobile layout (no-op on desktop — container remains hidden via CSS)
+		renderMobileLayout(records);
+	}
+
+	// ---------------------------------------------------------------
+	// MOBILE LAYOUT RENDERER
+	// Builds the day-wise stacked card UI inside #mobileTimetable.
+	// Called every time renderRecords() runs — single source of truth.
+	// ---------------------------------------------------------------
+	function renderMobileLayout(records) {
+		const mobileContainer = document.getElementById('mobileTimetable');
+		if (!mobileContainer) return;
+
+		// Group records by day, preserving DAY_ORDER sequence
+		const byDay = {};
+		DAY_ORDER.forEach((day) => { byDay[day] = []; });
+		if (Array.isArray(records)) {
+			records.forEach((record) => {
+				if (byDay[record.day]) byDay[record.day].push(record);
+			});
+		}
+
+		// Sort each day's records by start_time ascending
+		DAY_ORDER.forEach((day) => {
+			byDay[day].sort((a, b) => {
+				return (timeToMinutes((a.start_time || '').slice(0, 5)) || 0)
+					 - (timeToMinutes((b.start_time || '').slice(0, 5)) || 0);
+			});
+		});
+
+		// Format a raw HH:MM:SS time string as readable "H:MM"
+		function fmtTime(t) {
+			if (!t) return '';
+			const [hStr, mStr] = t.slice(0, 5).split(':');
+			const h = parseInt(hStr, 10);
+			return `${h}:${mStr}`;
+		}
+
+		// Detect today to highlight its card
+		const todayDayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][new Date().getDay()];
+
+		let html = '';
+
+		DAY_ORDER.forEach((day) => {
+			const dayRecords = byDay[day];
+			const count = dayRecords.length;
+			const isToday = day === todayDayName;
+
+			// Build slot rows HTML
+			let slotsHTML = '';
+			if (count === 0) {
+				slotsHTML = '<div class="mobile-empty-state">No classes scheduled</div>';
+			} else {
+				dayRecords.forEach((record) => {
+					const type = (record.type || 'class').toLowerCase();
+					const title = type === 'break' ? 'Break' : (record.title || 'Class');
+					const bgColor = isHexColor(record.color) ? record.color.trim() : '#4CAF50';
+					const timeRange = `${fmtTime(record.start_time)} – ${fmtTime(record.end_time)}`;
+
+					// Edit/delete buttons — rendered always, shown via CSS only in edit-mode
+					const actionsHTML = `
+						<div class="mobile-slot-actions">
+							<button class="action-btn edit-btn" type="button" data-action="mobile-edit" data-id="${record.id}" title="Edit Class" aria-label="Edit ${escapeHtml(title)}">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+									<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+									<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+								</svg>
+							</button>
+							<button class="action-btn delete-btn" type="button" data-action="mobile-delete" data-id="${record.id}" title="Delete Class" aria-label="Delete ${escapeHtml(title)}">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+									<polyline points="3 6 5 6 21 6"></polyline>
+									<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+								</svg>
+							</button>
+						</div>`;
+
+					slotsHTML += `
+						<div class="mobile-slot-row">
+							<div class="mobile-slot-time">${escapeHtml(timeRange)}</div>
+							<div class="mobile-slot-subject" style="background-color: ${escapeHtml(bgColor)}22; border-left: 3px solid ${escapeHtml(bgColor)};">
+								<span class="mobile-subject-name" style="color: ${escapeHtml(bgColor)};">${escapeHtml(title)}</span>
+								${actionsHTML}
+							</div>
+						</div>`;
+				});
+			}
+
+			html += `
+				<div class="mobile-day-card${isToday ? ' today' : ''}" data-day="${escapeHtml(day)}">
+					<div class="mobile-day-header">
+						<div class="mobile-day-title-group">
+							<span class="mobile-day-title">${escapeHtml(day)}</span>
+							${isToday ? '<span class="mobile-today-badge">Today</span>' : ''}
+						</div>
+						<div class="mobile-day-right">
+							<span class="mobile-day-badge">${count} ${count === 1 ? 'class' : 'classes'}</span>
+							<svg class="mobile-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+								<polyline points="6 9 12 15 18 9"></polyline>
+							</svg>
+						</div>
+					</div>
+					<div class="mobile-slot-list">${slotsHTML}</div>
+				</div>`;
+		});
+
+		mobileContainer.innerHTML = html;
+		mobileContainer.classList.toggle('edit-mode', isEditMode);
+
+		// Accordion: toggle collapsed class on card header click
+		mobileContainer.querySelectorAll('.mobile-day-header').forEach((header) => {
+			header.addEventListener('click', () => {
+				header.closest('.mobile-day-card').classList.toggle('collapsed');
+			});
+		});
+
+		// Event delegation for mobile edit/delete taps
+		mobileContainer.querySelectorAll('[data-action="mobile-edit"]').forEach((btn) => {
+			btn.addEventListener('click', (e) => {
+				e.stopPropagation(); // prevent accordion toggle
+				const numericId = Number(btn.dataset.id);
+				if (!Number.isInteger(numericId) || numericId <= 0) return;
+				const selectedRecord = currentRecords.find((r) => Number(r.id) === numericId);
+				if (!selectedRecord) return;
+				editingClassId = numericId;
+				if (classTitleInput) classTitleInput.value = selectedRecord.title || '';
+				if (classDayInput) classDayInput.value = selectedRecord.day || 'Monday';
+				if (classStartTimeInput) classStartTimeInput.value = (selectedRecord.start_time || '').slice(0, 5);
+				if (classEndTimeInput) classEndTimeInput.value = (selectedRecord.end_time || '').slice(0, 5);
+				if (classTypeInput) classTypeInput.value = (selectedRecord.type || 'class').toLowerCase();
+				setSelectedColor(selectedRecord.color || '#8B5CF6');
+				openModal();
+			});
+		});
+
+		mobileContainer.querySelectorAll('[data-action="mobile-delete"]').forEach((btn) => {
+			btn.addEventListener('click', (e) => {
+				e.stopPropagation(); // prevent accordion toggle
+				const numericId = Number(btn.dataset.id);
+				if (!Number.isInteger(numericId) || numericId <= 0) return;
+				if (confirm('Are you sure you want to delete this class?')) {
+					fetch(`${API_URL}/${encodeURIComponent(numericId)}?user_id=${encodeURIComponent(userId)}`, {
+						method: 'DELETE'
+					})
+						.then(async (response) => {
+							const responseData = await response.json().catch(() => ({}));
+							if (!response.ok || !responseData.success) {
+								throw new Error(responseData.message || responseData.error || 'Failed to delete class');
+							}
+							await initializeTimeTable();
+						})
+						.catch((error) => {
+							console.error('Error deleting class (mobile):', error);
+							showClassFormError(error.message || 'Unable to delete class. Please try again.');
+						});
+				}
+			});
+		});
 	}
 
 	// 3. Add Class Button
@@ -311,7 +469,10 @@ document.addEventListener('DOMContentLoaded', () => {
 					editTimeTableBtn.classList.remove('active');
 				}
 			}
-			// Re-render records to show/hide action icons based on edit mode
+			// Sync mobile container edit-mode class immediately
+			const mobileContainer = document.getElementById('mobileTimetable');
+			if (mobileContainer) mobileContainer.classList.toggle('edit-mode', isEditMode);
+			// Re-render both layouts with updated edit mode state
 			if (currentRecords) {
 				renderRecords(currentRecords);
 			}

@@ -104,6 +104,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalAddTaskBtn = document.getElementById('modalAddTaskBtn');
     const deleteTaskBtn = document.getElementById('deleteTaskBtn');
 
+    const taskModalApi = window.FocusGridTaskModal
+        ? window.FocusGridTaskModal.init({
+            userId,
+            apiUrl: API_URL,
+            openTriggerSelector: '#addTaskBtn',
+            onTaskSaved: async (payload) => {
+                await loadTasks();
+                if (selectedDateStr === payload.task_date) {
+                    refreshSelectedDay();
+                }
+            },
+            onTaskDeleted: async () => {
+                await loadTasks();
+                refreshSelectedDay();
+            }
+        })
+        : { openAddTask: () => {}, openEditTask: () => {} };
+
 
     // 5. Fetch Tasks & Render
     async function loadTasks() {
@@ -319,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         editBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            openEditTask(task);
+            taskModalApi.openEditTask(task);
         });
         
         deleteBtn.addEventListener('click', (e) => {
@@ -439,139 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // 8. Modals UI
-    function openAddTask(datePrefill = "") {
-        document.getElementById('formModalTitle').innerText = "Add Task";
-        if(taskForm) taskForm.reset();
-        document.getElementById('taskId').value = "";
-        
-        const statusGroup = document.getElementById('statusGroup');
-        if (statusGroup) statusGroup.style.display = "none";
-        
-        if (deleteTaskBtn) deleteTaskBtn.style.display = "none";
-        
-        if (datePrefill) {
-            document.getElementById('taskDate').value = datePrefill;
-        } else {
-            // Default to today in local timezone (no UTC conversion)
-            document.getElementById('taskDate').value = getLocalDateString();
-        }
-        
-        if (taskFormModal) taskFormModal.style.display = "flex";
-    }
-
-    function openEditTask(task) {
-        document.getElementById('formModalTitle').innerText = "Edit Task";
-        document.getElementById('taskId').value = task.id;
-        document.getElementById('taskTitle').value = task.title;
-        document.getElementById('taskDesc').value = task.description || "";
-        
-        // Ensure date formatting is YYYY-MM-DD
-        const dateVal = normalizeTaskDate(task.task_date);
-        document.getElementById('taskDate').value = dateVal;
-        
-        document.getElementById('taskStart').value = task.start_time || "";
-        document.getElementById('taskEnd').value = task.end_time || "";
-        document.getElementById('taskStatus').value = task.status || 'pending';
-        
-        const statusGroup = document.getElementById('statusGroup');
-        if(statusGroup) statusGroup.style.display = "block";
-        if(deleteTaskBtn) deleteTaskBtn.style.display = "block"; 
-        
-        if(taskModal) taskModal.style.display = "none"; 
-        if(taskFormModal) taskFormModal.style.display = "flex";
-    }
-
-    // 9. Database CRUD Handlers
-    
-    // Save/Update Submit Form
-    if(taskForm) {
-        taskForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const taskId = document.getElementById('taskId').value;
-            
-            const payload = {
-                user_id: userId,
-                title: document.getElementById('taskTitle').value,
-                description: document.getElementById('taskDesc').value,
-                task_date: document.getElementById('taskDate').value,
-                start_time: document.getElementById('taskStart').value,
-                end_time: document.getElementById('taskEnd').value,
-                status: document.getElementById('taskStatus').value || 'pending'
-            };
-
-            // Validate required fields
-            if (!payload.title || !payload.title.trim()) {
-                alert("Task title is required");
-                return;
-            }
-            if (!payload.task_date) {
-                alert("Task date is required");
-                return;
-            }
-
-            // Fix empty times sending string issues
-            if(!payload.start_time) payload.start_time = null;
-            if(!payload.end_time) payload.end_time = null;
-
-            const method = taskId ? 'PUT' : 'POST';
-            const endpoint = taskId ? `${API_URL}/${taskId}` : API_URL;
-
-            try {
-                const res = await fetch(endpoint, {
-                    method: method,
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                const data = await res.json();
-
-                if(data.success) {
-                    taskFormModal.style.display = "none";
-                    await loadTasks(); // Refresh calendar completely
-
-                    // If we were inside the day view, optionally reopen it updated
-                    if (selectedDateStr === payload.task_date) {
-                        refreshSelectedDay();
-                    }
-                } else {
-                    const errorMsg = data.error || "Unknown error";
-                    console.error(`[TASK] Save failed:`, errorMsg);
-                    alert("Error saving task: " + errorMsg);
-                }
-            } catch (err) {
-                console.error("[TASK] Save Error:", err);
-                alert("Network error while saving task: " + err.message);
-            }
-        });
-    }
-
-    // Delete Task Handler
-    if(deleteTaskBtn) {
-        deleteTaskBtn.addEventListener('click', async () => {
-            const taskId = document.getElementById('taskId').value;
-            if(!taskId) return;
-            
-            if(confirm("Confirm deletion of this task?")) {
-                try {
-                    const res = await fetch(`${API_URL}/${taskId}?user_id=${userId}`, {
-                        method: 'DELETE'
-                    });
-                    const data = await res.json();
-                    if(data.success) {
-                        taskFormModal.style.display = "none";
-                        await loadTasks();
-
-                        refreshSelectedDay();
-                    } else {
-                        alert("Delete failed: " + data.error);
-                    }
-                } catch(err) {
-                    console.error("Delete error:", err);
-                }
-            }
-        });
-    }
+    // 8. Database CRUD Handlers
 
     // 10. Nav & Modals Toggles Listeners
     const prevBtn = document.getElementById('prevMonth');
@@ -589,9 +475,6 @@ document.addEventListener('DOMContentLoaded', () => {
             loadTasks();
         };
     }
-    if (addTaskBtn) {
-        addTaskBtn.onclick = () => openAddTask();
-    }
     if (routineBtn) {
         routineBtn.onclick = () => {
             window.location.href = 'routines.html';
@@ -600,7 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modalAddTaskBtn) {
         modalAddTaskBtn.onclick = () => {
             if (taskModal) taskModal.style.display = 'none';
-            openAddTask(selectedDateStr);
+            taskModalApi.openAddTask(selectedDateStr);
         };
     }
     if (closeTaskModal) {
@@ -608,18 +491,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (taskModal) taskModal.style.display = 'none';
         }
     }
-    if (closeTaskFormModal) {
-        closeTaskFormModal.onclick = () => {
-            if (taskFormModal) taskFormModal.style.display = 'none';
-        }
-    }
-
     window.addEventListener('click', (e) => {
         if (e.target === taskModal) {
             taskModal.style.display = 'none';
-        }
-        if (e.target === taskFormModal) {
-            taskFormModal.style.display = 'none';
         }
     });
 
