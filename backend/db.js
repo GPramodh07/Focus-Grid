@@ -27,46 +27,43 @@
 const mysql = require('mysql2');
 const path = require('path');
 
-// 1. Identify the environment (defaults to development)
+// 1. Identify environment
 const env = process.env.NODE_ENV || 'development';
-
-// 2. Try to load the environment-specific file
-// We wrap this in a way that it won't crash if the file is missing
-require('dotenv').config({
-  path: path.resolve(__dirname, `../.env.${env}`)
-});
-
-// 3. IMPORTANT FALLBACK: Load the system environment variables
-// This ensures Render's dashboard variables are used if the file doesn't exist
-require('dotenv').config(); 
-
 const isProduction = env === 'production';
 
+// 2. ONLY load files if we are NOT on Render
+if (!isProduction) {
+    require('dotenv').config({
+        path: path.resolve(__dirname, `../.env.${env}`)
+    });
+}
+
+// 3. This is the magic line - it tells Node to look at the Dashboard variables
+require('dotenv').config(); 
+
 const pool = mysql.createPool({
-  // If process.env.DB_HOST is in the Render Dashboard, it will be used here
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT || (isProduction ? 12892 : 3306),
-
-  ssl: isProduction
-    ? { rejectUnauthorized: false }
-    : false,
-
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
+    // These now MUST come from the Render Environment variables in production
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    port: process.env.DB_PORT || (isProduction ? 12892 : 3306),
+    ssl: isProduction ? { rejectUnauthorized: false } : false,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
 // Test connection
 pool.getConnection((err, connection) => {
-  if (err) {
-    console.error("❌ DB connection error:", err.message);
-  } else {
-    console.log(`✅ Connected to ${isProduction ? 'Aiven (Production)' : 'Local MySQL'}`);
-    connection.release();
-  }
+    if (err) {
+        console.error("❌ DB connection error:", err.message);
+        // This will print the host it's TRYING to use, helping us debug
+        console.error("Attempted Host:", process.env.DB_HOST); 
+    } else {
+        console.log(`✅ Connected to ${isProduction ? 'Aiven (Production)' : 'Local MySQL'}`);
+        connection.release();
+    }
 });
 
 module.exports = pool;
