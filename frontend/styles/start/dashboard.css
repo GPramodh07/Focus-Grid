@@ -6,6 +6,7 @@ body {
     padding: 0;
     overflow: hidden;
     height: 100vh;
+    height: 100dvh; /* Dynamic viewport height — accounts for mobile browser chrome */
 }
 
 /* Dashboard Container */
@@ -13,6 +14,7 @@ body {
     display: flex;
     flex: 1;
     overflow: hidden;
+    min-height: 0; /* Allow flex children to shrink properly */
 }
 
 /* Base class for frosted glass effect */
@@ -125,6 +127,7 @@ body {
 
 .sidebar-footer {
     padding: 0 1rem;
+    padding-bottom: 2rem;
     white-space: nowrap;
 }
 
@@ -348,6 +351,7 @@ body {
         top: 0;
         left: 0;
         height: 100vh;
+        height: 100dvh; /* Dynamic viewport height — keeps Logout visible above browser chrome */
         z-index: 100;
         border-right: 1px solid var(--glass-border);
         background: var(--bg-color);
@@ -375,6 +379,7 @@ body {
     /* Dashboard body */
     .dashboard-body {
         padding: 1.5rem;
+        padding-bottom: 3rem;
     }
 
     .dashboard-grid {
@@ -428,6 +433,7 @@ body {
     /* Dashboard body */
     .dashboard-body {
         padding: 1rem;
+        padding-bottom: 4rem;
     }
 
     .dashboard-grid {
@@ -1163,6 +1169,9 @@ body {
 
 #taskFormModal .modal-content {
     width: min(92vw, 520px);
+    max-height: calc(100vh - 2rem);
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
     border-radius: 20px;
     padding: 1.6rem;
     display: flex;
@@ -1283,6 +1292,9 @@ body {
 
 #routineModal .modal-content {
     width: min(92vw, 520px);
+    max-height: calc(100vh - 2rem);
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
     border-radius: 20px;
     padding: 1.6rem;
     display: flex;
