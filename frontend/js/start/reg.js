@@ -4,11 +4,35 @@ document.addEventListener('DOMContentLoaded', () => {
     if (regForm) {
         regForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            const formError = document.getElementById('formError');
+            formError.className = 'form-inline-error'; // Reset class and hide it
+            formError.textContent = '';
 
-            const name = document.getElementById('name').value;
-            const username = document.getElementById('username').value;
+            const name = document.getElementById('name').value.trim();
+            const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             const regBtn = document.querySelector('.reg-btn');
+
+            // Frontend Validation
+            if (name.length < 2) {
+                formError.textContent = "Please enter a valid full name (at least 2 characters).";
+                formError.classList.add('show');
+                return;
+            }
+
+            const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
+            if (!usernameRegex.test(username)) {
+                formError.textContent = "Username must be 3-20 characters long and contain only letters, numbers, and underscores.";
+                formError.classList.add('show');
+                return;
+            }
+
+            if (password.length < 6) {
+                formError.textContent = "Password must be at least 6 characters long.";
+                formError.classList.add('show');
+                return;
+            }
 
             regBtn.textContent = 'Registering...';
             regBtn.disabled = true;
@@ -23,16 +47,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
 
                 if (response.ok && data.success) {
-                    alert('Registration successful! Please sign in.');
-                    window.location.href = 'login.html';
+                    formError.className = 'form-inline-success show';
+                    formError.textContent = 'Registration successful! Redirecting to login...';
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 1500);
                 } else {
-                    alert(data.message || 'Registration failed.');
+                    // Backend handles unique username validation
+                    formError.textContent = data.message || 'Registration failed.';
+                    formError.classList.add('show');
                     regBtn.textContent = 'Sign Up';
                     regBtn.disabled = false;
                 }
             } catch (error) {
                 console.error("Registration Error:", error);
-                alert("Could not connect to the server. Please check your connection.");
+                formError.textContent = "Could not connect to the server. Please check your connection.";
+                formError.classList.add('show');
                 regBtn.textContent = 'Sign Up';
                 regBtn.disabled = false;
             }

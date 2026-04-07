@@ -44,6 +44,13 @@
 
             if (formTitle) formTitle.innerText = 'Add Task';
             taskForm.reset();
+            
+            const formError = document.getElementById('taskFormError');
+            if (formError) {
+                formError.classList.remove('show');
+                formError.textContent = '';
+            }
+            
             if (taskIdInput) taskIdInput.value = '';
             if (statusGroup) statusGroup.style.display = 'none';
             if (deleteTaskBtn) deleteTaskBtn.style.display = 'none';
@@ -67,6 +74,13 @@
             const statusGroup = document.getElementById('statusGroup');
 
             if (formTitle) formTitle.innerText = 'Edit Task';
+            
+            const formError = document.getElementById('taskFormError');
+            if (formError) {
+                formError.classList.remove('show');
+                formError.textContent = '';
+            }
+            
             if (taskIdInput) taskIdInput.value = task.id || '';
             if (taskTitleInput) taskTitleInput.value = task.title || '';
             if (taskDescInput) taskDescInput.value = task.description || '';
@@ -97,13 +111,25 @@
                     status: (document.getElementById('taskStatus').value || 'pending')
                 };
 
+                const formError = document.getElementById('taskFormError');
+                if (formError) {
+                    formError.classList.remove('show');
+                    formError.textContent = '';
+                }
+
                 if (!payload.title || !payload.title.trim()) {
-                    alert('Task title is required');
+                    if (formError) {
+                        formError.textContent = 'Task title is required';
+                        formError.classList.add('show');
+                    }
                     return;
                 }
 
                 if (!payload.task_date) {
-                    alert('Task date is required');
+                    if (formError) {
+                        formError.textContent = 'Task date is required';
+                        formError.classList.add('show');
+                    }
                     return;
                 }
 
@@ -123,7 +149,10 @@
                     const data = await res.json();
                     if (!data.success) {
                         const errorMsg = data.error || 'Unknown error';
-                        alert('Error saving task: ' + errorMsg);
+                        if (formError) {
+                            formError.textContent = 'Error saving task: ' + errorMsg;
+                            formError.classList.add('show');
+                        }
                         return;
                     }
 
@@ -132,7 +161,10 @@
                         settings.onTaskSaved(payload, taskId);
                     }
                 } catch (err) {
-                    alert('Network error while saving task: ' + err.message);
+                    if (formError) {
+                        formError.textContent = 'Network error while saving task: ' + err.message;
+                        formError.classList.add('show');
+                    }
                 }
             });
         }
@@ -140,6 +172,11 @@
         if (deleteTaskBtn && !deleteTaskBtn.dataset.modalBound) {
             deleteTaskBtn.dataset.modalBound = 'true';
             deleteTaskBtn.addEventListener('click', async function () {
+                const formError = document.getElementById('taskFormError');
+                if (formError) {
+                    formError.classList.remove('show');
+                    formError.textContent = '';
+                }
                 const taskId = document.getElementById('taskId').value;
                 if (!taskId) return;
 
@@ -152,7 +189,10 @@
                     const data = await res.json();
 
                     if (!data.success) {
-                        alert('Delete failed: ' + (data.error || 'Unknown error'));
+                        if (formError) {
+                            formError.textContent = 'Delete failed: ' + (data.error || 'Unknown error');
+                            formError.classList.add('show');
+                        }
                         return;
                     }
 
@@ -161,7 +201,10 @@
                         settings.onTaskDeleted(taskId);
                     }
                 } catch (err) {
-                    alert('Error deleting task');
+                    if (formError) {
+                        formError.textContent = 'Error deleting task';
+                        formError.classList.add('show');
+                    }
                 }
             });
         }

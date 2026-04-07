@@ -4,6 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            const formError = document.getElementById('formError');
+            formError.classList.remove('show');
+            formError.textContent = '';
 
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
@@ -25,13 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.setItem('focusGridUser', JSON.stringify(data.user));
                     window.location.href = 'dashboard.html';
                 } else {
-                    alert(data.message || 'Login failed. Please check your credentials.');
+                    formError.textContent = data.message || 'Login failed. Please check your credentials.';
+                    formError.classList.add('show');
                     loginBtn.textContent = 'Sign In';
                     loginBtn.disabled = false;
                 }
             } catch (error) {
                 console.error("Login Error:", error);
-                alert("Could not connect to the server. Please ensure the backend is running.");
+                formError.textContent = "Could not connect to the server. Please ensure the backend is running.";
+                formError.classList.add('show');
                 loginBtn.textContent = 'Sign In';
                 loginBtn.disabled = false;
             }

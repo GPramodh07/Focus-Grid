@@ -399,11 +399,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                         closeModal();
                     } else {
-                        alert(data.message || 'Failed to delete subject');
+                        showFormError(data.message || 'Failed to delete subject');
                     }
                 } catch (error) {
                     console.error('Error deleting subject:', error);
-                    alert('Error communicating with the server');
+                    showFormError('Error communicating with the server');
                 }
             }
         });

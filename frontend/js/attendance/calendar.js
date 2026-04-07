@@ -206,6 +206,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (form) {
         form.onsubmit = async (e) => {
             e.preventDefault();
+            
+            const formError = document.getElementById('attendanceFormError');
+            if (formError) {
+                formError.classList.remove('show');
+                formError.textContent = '';
+            }
+
             const recordIdInput = document.getElementById('recordId');
             const selectedDateInput = document.getElementById('selectedDate');
             const hoursInput = document.getElementById('hours');
@@ -242,10 +249,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (modal) modal.style.display = 'none';
                     fetchAttendance();
                 } else {
-                    alert(result.message);
+                    if (formError) {
+                        formError.textContent = result.message || 'Failed to save attendance';
+                        formError.classList.add('show');
+                    }
                 }
             } catch (error) {
                 console.error("Error saving attendance:", error);
+                if (formError) {
+                    formError.textContent = 'Error communicating with the server';
+                    formError.classList.add('show');
+                }
             }
         };
     }
