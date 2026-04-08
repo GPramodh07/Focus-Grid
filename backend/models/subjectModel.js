@@ -18,18 +18,18 @@ exports.createSubject = (userId, subjectName) => {
     });
 };
 
-exports.updateSubject = (id, subjectName) => {
+exports.updateSubject = (id, userId, subjectName) => {
     return new Promise((resolve, reject) => {
-        db.query("UPDATE subjects SET subject_name = ? WHERE id = ?", [subjectName, id], (error, result) => {
+        db.query("UPDATE subjects SET subject_name = ? WHERE id = ? AND user_id = ?", [subjectName, id, userId], (error, result) => {
             if (error) return reject(error);
             resolve(result);
         });
     });
 };
 
-exports.deleteSubject = (id) => {
+exports.deleteSubject = (id, userId) => {
     return new Promise((resolve, reject) => {
-        db.query("DELETE FROM subjects WHERE id = ?", [id], (error, result) => {
+        db.query("DELETE FROM subjects WHERE id = ? AND user_id = ?", [id, userId], (error, result) => {
             if (error) return reject(error);
             resolve(result);
         });

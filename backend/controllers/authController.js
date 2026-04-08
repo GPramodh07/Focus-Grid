@@ -1,5 +1,8 @@
 const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+const JWT_SECRET = process.env.JWT_SECRET || "change-this-jwt-secret";
 
 exports.login = async (req, res) => {
     const { username, password } = req.body;
@@ -20,7 +23,18 @@ exports.login = async (req, res) => {
                 : storedPassword === password;
 
             if (isValidPassword) {
-                return res.json({ success: true, message: "Login successful", user: { id: user.id, username: user.username, name: user.name } });
+                const token = jwt.sign(
+                    { userId: user.id, username: user.username },
+                    JWT_SECRET,
+                    { expiresIn: "7d" }
+                );
+
+                return res.json({
+                    success: true,
+                    message: "Login successful",
+                    token,
+                    user: { id: user.id, username: user.username, name: user.name }
+                });
             } else {
                 return res.status(401).json({ success: false, message: "Incorrect password" });
             }

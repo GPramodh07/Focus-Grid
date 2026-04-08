@@ -156,6 +156,24 @@ document.addEventListener('DOMContentLoaded', () => {
             dayEl.onclick = () => openModal(dateStr, record);
             grid.appendChild(dayEl);
         }
+
+        // Update statistics after calendar is rendered
+        updateStatistics();
+    }
+
+    // Update Attendance Statistics
+    function updateStatistics() {
+        const totalClassesEl = document.getElementById('totalClasses');
+        const presentClassesEl = document.getElementById('presentClasses');
+        const absentClassesEl = document.getElementById('absentClasses');
+
+        const totalClasses = attendanceData.length;
+        const presentClasses = attendanceData.filter(a => a.status === 'present').length;
+        const absentClasses = attendanceData.filter(a => a.status === 'absent').length;
+
+        if (totalClassesEl) totalClassesEl.textContent = totalClasses;
+        if (presentClassesEl) presentClassesEl.textContent = presentClasses;
+        if (absentClassesEl) absentClassesEl.textContent = absentClasses;
     }
 
     // Modal Logic

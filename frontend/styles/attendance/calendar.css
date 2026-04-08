@@ -383,6 +383,52 @@
         }
 
 /* ============================================
+   ATTENDANCE STATISTICS
+   ============================================ */
+.attendance-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px 24px;
+    margin-top: 10px;
+}
+
+.stat-item {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 12px;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.stat-total {
+    color: rgba(139, 92, 246, 0.9);
+}
+
+.stat-present {
+    color: rgba(16, 185, 129, 0.9);
+}
+
+.stat-absent {
+    color: rgba(239, 68, 68, 0.9);
+}
+
+/* ============================================
    RESPONSIVE — TABLET (768px)
    ============================================ */
 @media (max-width: 768px) {
@@ -428,6 +474,23 @@
         top: 6px;
         right: 6px;
         padding: 1px 4px;
+    }
+
+    /* Stats for Tablet and Mobile L */
+    .attendance-stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        padding: 16px 18px;
+        margin-top: 8px;
+    }
+
+    .stat-label {
+        font-size: 0.7rem;
+        margin-bottom: 6px;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
     }
 
     /* Modal */
@@ -506,6 +569,23 @@
         top: 3px;
         right: 3px;
         padding: 1px 3px;
+    }
+
+    /* Stats for Mobile */
+    .attendance-stats {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        padding: 12px 14px;
+        margin-top: 6px;
+    }
+
+    .stat-label {
+        font-size: 0.65rem;
+        margin-bottom: 4px;
+    }
+
+    .stat-value {
+        font-size: 1.2rem;
     }
 
     /* Modal */

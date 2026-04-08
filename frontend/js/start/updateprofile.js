@@ -12,6 +12,10 @@
     }
 
     function getUserId() {
+        if (window.FocusGridAuth && typeof window.FocusGridAuth.getUserId === 'function') {
+            return window.FocusGridAuth.getUserId();
+        }
+
         const user = getCurrentUser();
         if (user && user.id) return user.id;
         return localStorage.getItem('user_id') || null;
@@ -227,8 +231,14 @@
                         name,
                         username
                     };
-                    localStorage.setItem('focusGridUser', JSON.stringify(updatedUser));
-                    localStorage.setItem('user_id', String(userId));
+
+                    if (window.FocusGridAuth && typeof window.FocusGridAuth.setSession === 'function') {
+                        const token = window.FocusGridAuth.getToken();
+                        window.FocusGridAuth.setSession(token, updatedUser);
+                    } else {
+                        localStorage.setItem('focusGridUser', JSON.stringify(updatedUser));
+                        localStorage.setItem('user_id', String(userId));
+                    }
 
                     updateHeader(updatedUser);
                     closeModal();

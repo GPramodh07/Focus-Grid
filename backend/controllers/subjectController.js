@@ -1,9 +1,9 @@
 const subjectModel = require("../models/subjectModel");
 
 exports.getSubjects = async (req, res) => {
-    const userId = req.query.user_id;
+    const userId = req.user && req.user.id;
     if (!userId) {
-        return res.status(400).json({ success: false, message: "user_id is required" });
+        return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
     try {
@@ -16,15 +16,16 @@ exports.getSubjects = async (req, res) => {
 };
 
 exports.addSubject = async (req, res) => {
-    const { user_id, subject_name } = req.body;
+    const userId = req.user && req.user.id;
+    const { subject_name } = req.body;
 
-    if (!user_id || !subject_name) {
-        return res.status(400).json({ success: false, message: "user_id and subject_name are required" });
+    if (!userId || !subject_name) {
+        return res.status(400).json({ success: false, message: "subject_name is required" });
     }
 
     try {
-        const result = await subjectModel.createSubject(user_id, subject_name);
-        res.status(201).json({ success: true, message: "Subject added", id: result.insertId, subject_name: subject_name, user_id: user_id });
+        const result = await subjectModel.createSubject(userId, subject_name);
+        res.status(201).json({ success: true, message: "Subject added", id: result.insertId, subject_name: subject_name, user_id: userId });
     } catch (error) {
         console.error("Error adding subject:", error);
         res.status(500).json({ success: false, message: "Could not add subject" });
@@ -32,6 +33,7 @@ exports.addSubject = async (req, res) => {
 };
 
 exports.updateSubject = async (req, res) => {
+    const userId = req.user && req.user.id;
     const subjectId = req.params.id;
     const { subject_name } = req.body;
 
@@ -40,7 +42,7 @@ exports.updateSubject = async (req, res) => {
     }
 
     try {
-        const result = await subjectModel.updateSubject(subjectId, subject_name);
+        const result = await subjectModel.updateSubject(subjectId, userId, subject_name);
         if (result.affectedRows === 0) {
             return res.status(404).json({ success: false, message: "Subject not found" });
         }
@@ -52,10 +54,11 @@ exports.updateSubject = async (req, res) => {
 };
 
 exports.deleteSubject = async (req, res) => {
+    const userId = req.user && req.user.id;
     const subjectId = req.params.id;
 
     try {
-        const result = await subjectModel.deleteSubject(subjectId);
+        const result = await subjectModel.deleteSubject(subjectId, userId);
         if (result.affectedRows === 0) {
             return res.status(404).json({ success: false, message: "Subject not found" });
         }

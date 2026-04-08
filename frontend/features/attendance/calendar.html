@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../../styles/start/dashboard.css">
     <link rel="stylesheet" href="../../styles/attendance/calendar.css">
     <link rel="stylesheet" href="../../styles/start/updateprofile.css">
+    <script src="../../js/components/auth.js"></script>
 </head>
 
 <body>
@@ -64,7 +65,7 @@
                     <a href="../time_table/table.html" class="menu-item">Time Table</a>
                 </nav>
                 <div class="sidebar-footer">
-                    <a href="../start/login.html" class="menu-item logout">Logout</a>
+                    <a href="../start/login.html" class="menu-item logout" data-auth-logout>Logout</a>
                 </div>
             </div>
         </aside>
@@ -96,6 +97,22 @@
 
                     <div class="calendar-grid glass-panel" id="calendarGrid">
                         <!-- Calendar will be injected here -->
+                    </div>
+
+                    <!-- Attendance Statistics -->
+                    <div class="attendance-stats glass-panel" id="attendanceStats">
+                        <div class="stat-item">
+                            <div class="stat-label">Total Classes</div>
+                            <div class="stat-value stat-total" id="totalClasses">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Present</div>
+                            <div class="stat-value stat-present" id="presentClasses">0</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-label">Absent</div>
+                            <div class="stat-value stat-absent" id="absentClasses">0</div>
+                        </div>
                     </div>
                 </div>
             </div>

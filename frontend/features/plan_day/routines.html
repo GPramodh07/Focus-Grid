@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="../../styles/start/dashboard.css">
 	<link rel="stylesheet" href="../../styles/plan_day/routines.css">
 	<link rel="stylesheet" href="../../styles/start/updateprofile.css">
+	<script src="../../js/components/auth.js"></script>
 </head>
 
 <body>
@@ -62,7 +63,7 @@
 					<a href="../time_table/table.html" class="menu-item">Time Table</a>
 				</nav>
 				<div class="sidebar-footer">
-					<a href="../start/login.html" class="menu-item logout">Logout</a>
+					<a href="../start/login.html" class="menu-item logout" data-auth-logout>Logout</a>
 				</div>
 			</div>
 		</aside>
@@ -122,9 +123,9 @@
 		</div>
 	</div>
 
+	<script src="../../config.js"></script>
 	<script src="../../js/plan_day/routineModalShared.js"></script>
 	<script src="../../js/start/updateprofile.js"></script>
-	<script src="../../config.js"></script>
 	<script src="../../js/plan_day/routines.js"></script>
 </body>
 

@@ -26,7 +26,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 const data = await response.json();
 
                 if (response.ok && data.success) {
-                    localStorage.setItem('focusGridUser', JSON.stringify(data.user));
+                    if (!data.token) {
+                        throw new Error('Missing authentication token in login response');
+                    }
+
+                    if (window.FocusGridAuth && typeof window.FocusGridAuth.setSession === 'function') {
+                        window.FocusGridAuth.setSession(data.token, data.user);
+                    } else {
+                        localStorage.setItem('focusGridToken', data.token);
+                        localStorage.setItem('focusGridUser', JSON.stringify(data.user));
+                        localStorage.setItem('user_id', String(data.user.id));
+                    }
+
                     window.location.href = 'dashboard.html';
                 } else {
                     formError.textContent = data.message || 'Login failed. Please check your credentials.';
