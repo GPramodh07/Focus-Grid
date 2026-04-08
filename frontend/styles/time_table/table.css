@@ -684,6 +684,12 @@
 	/* --- Show mobile timetable --- */
 	.mobile-timetable {
 		display: flex;
+		padding-bottom: 4rem; /* Extra breathing room so last day card isn't hidden by mobile browser chrome */
+	}
+
+	/* Ensure dashboard-body has enough bottom padding for timetable */
+	.dashboard-body {
+		padding-bottom: 4rem;
 	}
 
 	/* --------- DAY CARD --------- */
