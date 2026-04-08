@@ -1,8 +1,8 @@
 // API Configuration
 // Update this value based on your deployment environment
-const API_BASE_URL = 'http://localhost:5000';
+// const API_BASE_URL = 'http://localhost:5000';
 
-// const API_BASE_URL = 'https://focus-grid-9hg4.onrender.com';
+const API_BASE_URL = 'https://focus-grid-9hg4.onrender.com';
 //https://focus-grid-9hg4.onrender.com
 
 // API Endpoints
