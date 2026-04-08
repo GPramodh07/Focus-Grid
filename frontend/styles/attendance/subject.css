@@ -154,7 +154,7 @@
 
 .attendance-circle .percentage {
     position: absolute;
-    font-size: 0.85rem;
+    font-size: 0.65rem;
     font-weight: 600;
     color: white;
 }
@@ -302,7 +302,7 @@
     }
 
     .attendance-circle .percentage {
-        font-size: 0.75rem;
+        font-size: 0.60rem;
     }
 
     .action-btn {

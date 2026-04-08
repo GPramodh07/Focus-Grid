@@ -23,8 +23,9 @@ exports.getAttendancePercentageBySubject = (userId, subjectId) => {
     return new Promise((resolve, reject) => {
         const query = `
             SELECT 
-                COALESCE(SUM(a.status='present'), 0) AS presents, 
-                COALESCE(SUM(a.status='absent'), 0) AS absents 
+                COALESCE(SUM(CASE WHEN a.status='present' THEN a.hours ELSE 0 END), 0) AS presentHours,
+                COALESCE(SUM(CASE WHEN a.status='absent' THEN a.hours ELSE 0 END), 0) AS absentHours,
+                COALESCE(SUM(a.hours), 0) AS totalHours
             FROM attendance a
             INNER JOIN subjects s ON s.id = a.subject_id
             WHERE a.subject_id = ? AND s.user_id = ?
@@ -42,8 +43,9 @@ exports.getAttendanceSummaryByUser = (userId) => {
             SELECT
                 s.id AS subject_id,
                 s.subject_name,
-                COALESCE(SUM(a.status = 'present'), 0) AS presents,
-                COALESCE(SUM(a.status = 'absent'), 0) AS absents
+                COALESCE(SUM(CASE WHEN a.status = 'present' THEN a.hours ELSE 0 END), 0) AS presentHours,
+                COALESCE(SUM(CASE WHEN a.status = 'absent' THEN a.hours ELSE 0 END), 0) AS absentHours,
+                COALESCE(SUM(a.hours), 0) AS totalHours
             FROM subjects s
             LEFT JOIN attendance a ON a.subject_id = s.id
             WHERE s.user_id = ?
@@ -59,15 +61,16 @@ exports.getAttendanceSummaryByUser = (userId) => {
 };
 
 exports.calculateAttendancePercentage = (stats) => {
-    const presents = parseInt(stats && stats.presents, 10) || 0;
-    const absents = parseInt(stats && stats.absents, 10) || 0;
-    const total = presents + absents;
-    const percentage = total > 0 ? Math.round((presents / total) * 100) : 0;
+    const presentHours = parseFloat(stats && stats.presentHours, 10) || 0;
+    const absentHours = parseFloat(stats && stats.absentHours, 10) || 0;
+    const totalHours = parseFloat(stats && stats.totalHours, 10) || 0;
+    const percentage = totalHours > 0 ? (presentHours / totalHours) * 100 : 0;
 
     return {
-        presents,
-        absents,
-        percentage
+        presentHours: Math.round(presentHours),
+        absentHours: Math.round(absentHours),
+        totalHours: Math.round(totalHours),
+        percentage: Math.round(percentage * 100) / 100
     };
 };
 

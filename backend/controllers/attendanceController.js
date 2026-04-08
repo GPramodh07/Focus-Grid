@@ -25,13 +25,14 @@ exports.getAttendancePercentage = async (req, res) => {
 
     try {
         const stats = await attendanceModel.getAttendancePercentageBySubject(userId, subjectId);
-        const { presents, absents, percentage } = attendanceModel.calculateAttendancePercentage(stats);
+        const { presentHours, absentHours, totalHours, percentage } = attendanceModel.calculateAttendancePercentage(stats);
 
         res.json({
             success: true,
             subject_id: parseInt(subjectId),
-            presents,
-            absents,
+            presentHours,
+            absentHours,
+            totalHours,
             percentage
         });
     } catch (error) {
