@@ -167,9 +167,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const presentClassesEl = document.getElementById('presentClasses');
         const absentClassesEl = document.getElementById('absentClasses');
 
-        const totalClasses = attendanceData.length;
-        const presentClasses = attendanceData.filter(a => a.status === 'present').length;
-        const absentClasses = attendanceData.filter(a => a.status === 'absent').length;
+        // Calculate sum of hours for each status
+        const presentClasses = attendanceData
+            .filter(a => a.status === 'present')
+            .reduce((sum, a) => sum + parseFloat(a.hours), 0);
+        
+        const absentClasses = attendanceData
+            .filter(a => a.status === 'absent')
+            .reduce((sum, a) => sum + parseFloat(a.hours), 0);
+        
+        const totalClasses = presentClasses + absentClasses;
 
         if (totalClassesEl) totalClassesEl.textContent = totalClasses;
         if (presentClassesEl) presentClassesEl.textContent = presentClasses;
@@ -220,6 +227,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Hours Input Validation
+    const hoursInput = document.getElementById('hours');
+    const hoursError = document.getElementById('hoursError');
+
+    if (hoursInput) {
+        hoursInput.addEventListener('input', () => {
+            const value = parseFloat(hoursInput.value);
+            if (value > 8) {
+                if (hoursError) {
+                    hoursError.textContent = 'You cannot add more than 8 hours';
+                    hoursError.style.display = 'block';
+                }
+            } else {
+                if (hoursError) {
+                    hoursError.style.display = 'none';
+                    hoursError.textContent = '';
+                }
+            }
+        });
+    }
+
     // Save Attendance
     if (form) {
         form.onsubmit = async (e) => {
@@ -236,6 +264,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const hoursInput = document.getElementById('hours');
             const statusInput = document.getElementById('status');
             const noteInput = document.getElementById('note');
+
+            // Validate hours
+            const hours = parseFloat(hoursInput ? hoursInput.value : 0);
+            if (hours > 8) {
+                if (formError) {
+                    formError.textContent = 'You cannot add more than 8 hours';
+                    formError.classList.add('show');
+                }
+                return;
+            }
 
             const id = recordIdInput ? recordIdInput.value : null;
             const data = {
