@@ -151,6 +151,26 @@ body {
     /* For smooth resizing */
 }
 
+/* Scrollbar styling for main content */
+.main-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.main-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.3);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+.main-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 92, 246, 0.5);
+}
+
 /* --- TOP HEADER --- */
 /* Add wrapper to align button and text side-by-side */
 .header-left {
@@ -1179,6 +1199,26 @@ body {
     gap: 1rem;
 }
 
+/* Scrollbar styling for task form modal */
+#taskFormModal .modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+#taskFormModal .modal-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+#taskFormModal .modal-content::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.3);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+#taskFormModal .modal-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 92, 246, 0.5);
+}
+
 #taskFormModal .modal-header {
     display: flex;
     justify-content: space-between;
@@ -1300,6 +1340,26 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+}
+
+/* Scrollbar styling for routine modal */
+#routineModal .modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+#routineModal .modal-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+#routineModal .modal-content::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.3);
+    border-radius: 10px;
+    transition: background 0.3s ease;
+}
+
+#routineModal .modal-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 92, 246, 0.5);
 }
 
 #routineModal .modal-header {
