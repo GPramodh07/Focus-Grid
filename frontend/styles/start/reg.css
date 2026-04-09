@@ -64,6 +64,47 @@
     color: rgba(255, 255, 255, 0.3);
 }
 
+.password-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-wrapper input {
+    width: 100%;
+    padding-right: 3rem;
+}
+
+.password-toggle-btn {
+    position: absolute;
+    right: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: rgba(255, 255, 255, 0.5);
+    transition: color 0.3s ease;
+    padding: 0;
+}
+
+.password-toggle-btn:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.password-toggle-btn:active {
+    color: var(--primary);
+}
+
+.password-toggle-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+}
+
 .reg-btn {
     width: 100%;
     margin-top: 1rem;

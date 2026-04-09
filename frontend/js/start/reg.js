@@ -1,6 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
     const regForm = document.getElementById('regForm');
     
+    // Password toggle functionality
+    const passwordToggle = document.getElementById('passwordToggle');
+    const passwordInput = document.getElementById('password');
+    
+    if (passwordToggle && passwordInput) {
+        passwordToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            const eyeIcon = passwordToggle.querySelector('.eye-icon');
+            const eyeOffIcon = passwordToggle.querySelector('.eye-off-icon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.style.display = 'none';
+                eyeOffIcon.style.display = 'block';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.style.display = 'block';
+                eyeOffIcon.style.display = 'none';
+            }
+        });
+    }
+    
     if (regForm) {
         regForm.addEventListener('submit', async (e) => {
             e.preventDefault();
