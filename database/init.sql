@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS tasks (
     task_date DATE NOT NULL,
     start_time TIME NULL,
     end_time TIME NULL,
-    status ENUM('pending', 'completed') NOT NULL DEFAULT 'pending',
+    status ENUM('pending', 'completed', 'missed') NOT NULL DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_tasks_user FOREIGN KEY (user_id)

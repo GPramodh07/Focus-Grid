@@ -18,9 +18,17 @@ exports.login = async (req, res) => {
             const user = result[0];
             const storedPassword = String(user.password || "");
             const isHashed = storedPassword.startsWith("$2a$") || storedPassword.startsWith("$2b$") || storedPassword.startsWith("$2y$");
-            const isValidPassword = isHashed
-                ? await bcrypt.compare(password, storedPassword)
-                : storedPassword === password;
+
+            // Security: do not allow plaintext-password login.
+            // If any legacy plaintext rows exist, they must be migrated/reset.
+            if (!isHashed) {
+                return res.status(401).json({
+                    success: false,
+                    message: "Invalid credentials"
+                });
+            }
+
+            const isValidPassword = await bcrypt.compare(password, storedPassword);
 
             if (isValidPassword) {
                 const token = jwt.sign(

@@ -49,7 +49,16 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	if (!userId) {
-		userId = localStorage.getItem('user_id') || 1;
+		console.warn('Missing user session. Redirecting to login.');
+		if (window.FocusGridAuth && typeof window.FocusGridAuth.clearSession === 'function') {
+			window.FocusGridAuth.clearSession();
+		}
+		if (window.FocusGridAuth && typeof window.FocusGridAuth.redirectToLogin === 'function') {
+			window.FocusGridAuth.redirectToLogin();
+		} else {
+			window.location.href = '../start/login.html';
+		}
+		return;
 	}
 
 	const routineModalApi = window.FocusGridRoutineModal

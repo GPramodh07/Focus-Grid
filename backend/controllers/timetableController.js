@@ -13,7 +13,7 @@ const DAY_TO_INT = {
 
 function sendDbError(res, context, err) {
     console.error(`${context}:`, err);
-    return res.status(500).json({ success: false, error: 'Database error: ' + err.message });
+    return res.status(500).json({ success: false, message: 'Database error' });
 }
 
 function normalizeHexColor(value) {

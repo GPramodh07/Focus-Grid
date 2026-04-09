@@ -4,7 +4,7 @@ const Attendance = require('../models/attendanceModel');
 
 function sendDbError(res, context, err) {
     console.error(`${context}:`, err);
-    return res.status(500).json({ success: false, error: 'Database error: ' + err.message });
+    return res.status(500).json({ success: false, message: 'Database error' });
 }
 
 function mapJsDayToDbDay(jsDay) {
@@ -12,11 +12,25 @@ function mapJsDayToDbDay(jsDay) {
     return null;
 }
 
-function getLocalDateYMD() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
+function getTimezoneOffsetMinutes(req) {
+    const raw = req.headers['x-timezone-offset'];
+    if (raw === undefined || raw === null || raw === '') return 0;
+    const parsed = Number(String(raw));
+    return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function getClientNow(req) {
+    // JS getTimezoneOffset(): minutes to add to local time to get UTC.
+    // Convert server "now" into client's local time by subtracting that offset.
+    const offsetMinutes = getTimezoneOffsetMinutes(req);
+    const clientMs = Date.now() - offsetMinutes * 60 * 1000;
+    return new Date(clientMs);
+}
+
+function formatYmdFromDateUTC(dateObj) {
+    const year = dateObj.getUTCFullYear();
+    const month = String(dateObj.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getUTCDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 }
 
@@ -27,7 +41,8 @@ exports.getTodayClasses = (req, res) => {
         return res.status(401).json({ success: false, message: 'Unauthorized: user_id is required' });
     }
 
-    const jsDay = new Date().getDay();
+    const clientNow = getClientNow(req);
+    const jsDay = clientNow.getUTCDay();
     const dbDay = mapJsDayToDbDay(jsDay);
 
     if (!dbDay) {
@@ -50,7 +65,7 @@ exports.getTodayTasks = (req, res) => {
         return res.status(401).json({ success: false, message: 'Unauthorized: user_id is required' });
     }
 
-    const today = getLocalDateYMD();
+    const today = formatYmdFromDateUTC(getClientNow(req));
 
     Task.getTodayTasks(userId, today, (err, results) => {
         if (err) {

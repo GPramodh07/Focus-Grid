@@ -3,6 +3,9 @@ const app = express();
 require('dotenv').config();
 const port = process.env.PORT || 5000;
 
+// Needed for correct client IP when behind a reverse proxy (common in production)
+app.set('trust proxy', 1);
+
 // Import routes
 const authRoutes = require("./routes/authRoutes");
 const subjectRoutes = require("./routes/subjectRoutes");
@@ -17,7 +20,7 @@ const userRoutes = require("./routes/userRoutes");
 app.use(express.json());
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Timezone-Offset");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
     if (req.method === "OPTIONS") {
         return res.sendStatus(200);

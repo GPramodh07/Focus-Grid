@@ -2,14 +2,15 @@ const Task = require('../models/taskModel');
 
 function sendDbError(res, context, err) {
     console.error(`${context}:`, err);
-    return res.status(500).json({ success: false, error: "Database error: " + err.message });
+    return res.status(500).json({ success: false, message: "Database error" });
 }
 
 function normalizeTaskStatus(status) {
     if (!status) return 'pending';
 
     const normalized = String(status).trim().toLowerCase();
-    if (normalized === 'in-progress') return 'missed';
+    // Backward compatibility for older clients
+    if (normalized === 'in-progress' || normalized === 'inprogress') return 'pending';
 
     const allowedStatuses = ['pending', 'completed', 'missed'];
     return allowedStatuses.includes(normalized) ? normalized : 'pending';
@@ -38,7 +39,7 @@ exports.getTasksByDate = (req, res) => {
 
 exports.createTask = (req, res) => {
     if (!req.user || !req.user.id) {
-        return res.status(401).json({ success: false, error: "User not authenticated" });
+        return res.status(401).json({ success: false, message: "Unauthorized" });
     }
 
     const userId = req.user.id;
@@ -46,7 +47,7 @@ exports.createTask = (req, res) => {
     taskData.status = normalizeTaskStatus(taskData.status);
 
     if (!taskData.title || !taskData.task_date) {
-        return res.status(400).json({ success: false, error: "Title and date are required" });
+        return res.status(400).json({ success: false, message: "Title and date are required" });
     }
 
     Task.createTask(taskData, (err, result) => {
@@ -91,7 +92,7 @@ exports.updateTaskStatus = (req, res) => {
     }
 
     const normalizedStatus = String(status || '').trim().toLowerCase();
-    if (!['pending', 'completed'].includes(normalizedStatus)) {
+    if (!['pending', 'completed', 'missed'].includes(normalizedStatus)) {
         return res.status(400).json({ success: false, message: 'Invalid status value' });
     }
 

@@ -30,7 +30,7 @@
         </div>
 
         <div class="header-greeting">
-            <h3>Hi Boss,</h3>
+            <h3>Hi <span id="greetingName">Boss</span>,</h3>
             <div class="motivating-line">
                 ✨ "The secret of getting ahead is getting started."
             </div>
@@ -38,10 +38,10 @@
 
         <div class="user-profile">
             <div class="user-info">
-                <span class="name">Boss User</span>
-                <span class="username">@boss_user</span>
+                <span class="name" id="headerName">Boss User</span>
+                <span class="username" id="headerUsername">@boss_user</span>
             </div>
-            <div class="avatar">BU</div>
+            <div class="avatar" id="headerAvatar">BU</div>
         </div>
     </header>
 
@@ -246,6 +246,10 @@
         }
 
         function getCurrentUserId() {
+            if (window.FocusGridAuth && typeof window.FocusGridAuth.getUserId === 'function') {
+                return window.FocusGridAuth.getUserId();
+            }
+
             const userStr = localStorage.getItem('focusGridUser');
             if (userStr) {
                 try {
@@ -256,7 +260,25 @@
                 }
             }
 
-            return localStorage.getItem('user_id') || 1;
+            const legacyUserId = localStorage.getItem('user_id');
+            return legacyUserId ? Number(legacyUserId) : null;
+        }
+
+        function updateGreeting() {
+            const greetingNameEl = document.getElementById('greetingName');
+            if (!greetingNameEl) return;
+
+            const user = (window.FocusGridAuth && typeof window.FocusGridAuth.getCurrentUser === 'function')
+                ? window.FocusGridAuth.getCurrentUser()
+                : null;
+
+            const displayName = (user && (user.name || user.username))
+                ? String(user.name || user.username).trim()
+                : '';
+
+            if (displayName) {
+                greetingNameEl.textContent = displayName;
+            }
         }
 
         function formatTimeHHMM(timeValue) {
@@ -576,6 +598,21 @@
         const sidebarToggle = document.getElementById('sidebarToggle');
         const sidebar = document.querySelector('.sidebar');
 
+        // Enforce authenticated session on dashboard
+        const __dashboardUserId = getCurrentUserId();
+        if (!__dashboardUserId) {
+            if (window.FocusGridAuth && typeof window.FocusGridAuth.clearSession === 'function') {
+                window.FocusGridAuth.clearSession();
+            }
+            if (window.FocusGridAuth && typeof window.FocusGridAuth.redirectToLogin === 'function') {
+                window.FocusGridAuth.redirectToLogin();
+            } else {
+                window.location.href = 'login.html';
+            }
+        } else {
+            updateGreeting();
+        }
+
         sidebarToggle.addEventListener('click', () => {
             sidebar.classList.toggle('collapsed');
         });
@@ -642,11 +679,13 @@
             });
         }
 
-        loadTodayClasses();
-        loadTodayTasks();
-        loadAttendanceSummary();
-        initDashboardTaskQuickAction();
-        initDashboardRoutineQuickAction();
+        if (__dashboardUserId) {
+            loadTodayClasses();
+            loadTodayTasks();
+            loadAttendanceSummary();
+            initDashboardTaskQuickAction();
+            initDashboardRoutineQuickAction();
+        }
     </script>
 </body>
 

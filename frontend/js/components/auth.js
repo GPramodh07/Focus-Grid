@@ -134,6 +134,10 @@
                 headers.set('Authorization', `Bearer ${token}`);
             }
 
+            if (!headers.has('X-Timezone-Offset')) {
+                headers.set('X-Timezone-Offset', String(new Date().getTimezoneOffset()));
+            }
+
             requestInit.headers = headers;
 
             let response;

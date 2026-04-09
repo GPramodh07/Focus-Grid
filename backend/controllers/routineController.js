@@ -2,7 +2,7 @@ const Routine = require('../models/routineModel');
 
 function sendDbError(res, context, err) {
     console.error(`${context}:`, err);
-    return res.status(500).json({ success: false, error: 'Database error: ' + err.message });
+    return res.status(500).json({ success: false, message: 'Database error' });
 }
 
 exports.getRoutines = (req, res) => {
